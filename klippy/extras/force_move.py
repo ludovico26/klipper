@@ -127,13 +127,18 @@ class ForceMove:
         self.manual_move(stepper, distance, speed, accel)
     cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
     def cmd_MODIFY_ROTATION(self, gcmd):
-        stepper = self._lookup_stepper(gcmd)
+        stepper_name = gcmd.get('STEPPER', None)
         rotation = gcmd.get_float('NEW_ROTATION', None, above=0.)
+        if stepper_name not in self.steppers:
+            gcmd.respond_info('SET_STEPPER_DISTANCE: Invalid stepper "%s"'
+                              % (stepper_name,))
+            return
         if rotation is None:
             step_dist = self.stepper.get_step_dist()
             gcmd.respond_info("stepper '%s' step distance is %0.6f"
                               % (stepper_name, step_dist))
             return
+        toolhead.flush_step_generation()
         configfile = self.printer.lookup_object('configfile')
         configfile.set(stepper_name, "rotation_distance", rotation)
         gcmd.respond_info("stepper '%s' rotation distance set to %0.6f"
@@ -148,8 +153,9 @@ class ForceMove:
         if dist is None:
             step_dist = self.stepper.get_step_dist()
             gcmd.respond_info("stepper '%s' step distance is %0.6f"
-                              % (stepper_name, step_dist))
+                              % (stepper, step_dist))
             return
+        toolhead.flush_step_generation()
         self.stepper.set_step_dist(dist)
         gcmd.respond_info("stepper '%s' step distance set to %0.6f"
                           % (self.name, dist))
