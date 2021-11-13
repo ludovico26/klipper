@@ -51,6 +51,8 @@ class ForceMove:
                                    desc=self.cmd_SET_KINEMATIC_POSITION_help)
             gcode.register_command('MODIFY_ROTATION', self.cmd_MODIFY_ROTATION,
                                    desc=self.cmd_MODIFY_ROTATION_help)
+            gcode.register_command('SET_STEP_DIST', self.cmd_SET_STEP_DIST,
+                                   desc=self.cmd_SET_STEP_DIST_help)
     def register_stepper(self, config, mcu_stepper):
         self.steppers[mcu_stepper.get_name()] = mcu_stepper
     def lookup_stepper(self, name):
@@ -123,22 +125,36 @@ class ForceMove:
                      stepper.get_name(), distance, speed, accel)
         self._force_enable(stepper)
         self.manual_move(stepper, distance, speed, accel)
-    cmd_MODIFY_ROTATION_help = "Manually move a stepper; invalidates kinematics"
+    cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
     def cmd_MODIFY_ROTATION(self, gcmd):
         stepper = self._lookup_stepper(gcmd)
-        distance = gcmd.get_float('NEW_ROTATION', None, above=0.)
-        if distance is None:
+        rotation = gcmd.get_float('NEW_ROTATION', None, above=0.)
+        if rotation is None:
             step_dist = self.stepper.get_step_dist()
             gcmd.respond_info("stepper '%s' step distance is %0.6f"
                               % (stepper_name, step_dist))
             return
         configfile = self.printer.lookup_object('configfile')
-        configfile.set(stepper_name, "rotation_distance", dist)
+        configfile.set(stepper_name, "rotation_distance", rotation)
         gcmd.respond_info("stepper '%s' rotation distance set to %0.6f"
-                          % (stepper_name, dist))
+                          % (stepper_name, rotation))
         self.gcode.respond_info(
             "The SAVE_CONFIG command will update the printer config\n"
             "file with these parameters and restart the printer.")
+    cmd_SET_STEP_DIST_help = "Modify stepper step distance"
+    def cmd_SET_STEP_DIST(self, gcmd):
+        stepper = self._lookup_stepper(gcmd)
+        dist = gcmd.get_float('DISTANCE', None, above=0.)
+        if dist is None:
+            step_dist = self.stepper.get_step_dist()
+            gcmd.respond_info("stepper '%s' step distance is %0.6f"
+                              % (stepper_name, step_dist))
+            return
+        self.stepper.set_step_dist(dist)
+        gcmd.respond_info("stepper '%s' step distance set to %0.6f"
+                          % (self.name, dist))
+        logging.info("stepper '%s' step distance set to %0.6f"
+                          % (self.name, dist))
     cmd_SET_KINEMATIC_POSITION_help = "Force a low-level kinematic position"
     def cmd_SET_KINEMATIC_POSITION(self, gcmd):
         toolhead = self.printer.lookup_object('toolhead')
