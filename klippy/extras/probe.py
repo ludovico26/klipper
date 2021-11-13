@@ -380,6 +380,8 @@ class ProbePointsHelper:
         self.use_offsets = use_offsets
     def get_lift_speed(self):
         return self.lift_speed
+    def get_probe_points(self):
+        return self.probe_points
     def _move_next(self):
         toolhead = self.printer.lookup_object('toolhead')
         # Lift toolhead
