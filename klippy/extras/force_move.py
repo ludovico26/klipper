@@ -128,8 +128,8 @@ class ForceMove:
         stepper = self._lookup_stepper(gcmd)
         distance = gcmd.get_float('NEW_ROTATION', None, above=0.)
         if distance is None:
-		    step_dist = self.stepper.get_step_dist()
-		    gcmd.respond_info("stepper '%s' step distance is %0.6f"
+            step_dist = self.stepper.get_step_dist()
+            gcmd.respond_info("stepper '%s' step distance is %0.6f"
                               % (stepper_name, step_dist))
             return
         configfile = self.printer.lookup_object('configfile')
