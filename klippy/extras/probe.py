@@ -368,11 +368,9 @@ class ProbePointsHelper:
         # Internal probing state
         self.lift_speed = self.speed
         self.probe_offsets = (0., 0., 0.)
-        self.results = []
-        
+        self.results = []        
     def get_probe_points(self):
         return self.probe_points
-    
     def minimum_points(self,n):
         if len(self.probe_points) < n:
             raise self.printer.config_error(
