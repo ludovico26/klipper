@@ -138,7 +138,6 @@ class ZTilt:
         gcode = self.printer.lookup_object('gcode')
         gcode.register_command('Z_TILT_ADJUST', self.cmd_Z_TILT_ADJUST,
                                desc=self.cmd_Z_TILT_ADJUST_help)
-        
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
@@ -175,6 +174,5 @@ class ZTilt:
             self.retry_helper.check_retry([p[2] for p in positions]))
     def get_status(self, eventtime):
             return self.z_status.get_status(eventtime)
-        
 def load_config(config):
     return ZTilt(config)
