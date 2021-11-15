@@ -138,32 +138,6 @@ class ZTilt:
         gcode = self.printer.lookup_object('gcode')
         gcode.register_command('Z_TILT_ADJUST', self.cmd_Z_TILT_ADJUST,
                                desc=self.cmd_Z_TILT_ADJUST_help)
-        gcode.register_command('Z_TILT_MODIFY', self.cmd_Z_TILT_MODIFY,
-                               desc=self.cmd_Z_TILT_MODIFY_help)
-    cmd_Z_TILT_MODIFY_help = "Modify Z tilt positions and points"
-    def cmd_Z_TILT_MODIFY(self, gcmd):
-        logging.info("modifying z positions and probe points") #modificated
-        self.ad_gcmd = gcmd
-        offsets[0] = gcmd.get_float('A', 0., minval=-10, maxval=50)
-        offsets[1] = gcmd.get_float('B', 0., minval=-30,maxval=50)
-        offsets[2] = gcmd.get_float('C', 0., minval=-10, maxval=50)
-        offsets[3] = gcmd.get_float('D', 0., minval=-30,maxval=50)
-        z_pos = self.z_positions
-        p_pt=list(self.probe_helper.get_probe_points())
-        z_pos[0][1]= z_pos[0][1] +offsets[0]
-        z_pos[1][0]= z_pos[1][0] +offsets[1]
-        z_pos[2][1]= z_pos[2][1] +offsets[2]
-        z_pos[3][0]= z_pos[3][0] +offsets[3]
-        s_zpo=""
-        for z_pos in self.z_positions:
-            s_zpos=  += "%.6f, %.6f\n" % tuple(zpos)
-        configfile = self.printer.lookup_object('configfile')
-        section = self.section
-        configfile.set(section, "z_positions", s_zpos)
-        self.ad_gcmd.respond_info("final z_positions are %s" % (z_pos))
-        self.gcode.respond_info(
-            "The SAVE_CONFIG command will update the printer config\n"
-            "file with these parameters and restart the printer.")
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
