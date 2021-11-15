@@ -152,7 +152,7 @@ class ForceMove:
     def cmd_SET_STEP_DIST(self, gcmd):
         dist = gcmd.get_float('DISTANCE', None, above=0.)
         stepper_name = gcmd.get('STEPPER')
-        if stepper_name not in self.enable_lines:
+        if stepper_name not in  self.steppers:
             gcmd.respond_info('SET_STEP_DIST: Invalid stepper "%s"'
                               % (stepper_name,))
             return
