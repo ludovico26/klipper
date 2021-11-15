@@ -154,16 +154,13 @@ class ZTilt:
         z_pos[1][0]= z_pos[1][0] +offsets[1]
         z_pos[2][1]= z_pos[2][1] +offsets[2]
         z_pos[3][0]= z_pos[3][0] +offsets[3]
-        p_pt[0][1]= p_pt[0][1] +offsets[0]
-        p_pt[1][0]= p_pt[1][0] +offsets[1]
-        p_pt[2][1]= p_pt[2][1] +offsets[2]
-        p_pt[3][0]= p_pt[3][0] +offsets[3]
+        s_zpo=""
+        for z_pos in self.z_positions:
+            s_zpos=  += "%.6f, %.6f\n" % tuple(zpos)
         configfile = self.printer.lookup_object('configfile')
         section = self.section
-        configfile.set(section, "z_positions", z_pos)
+        configfile.set(section, "z_positions", s_zpos)
         self.ad_gcmd.respond_info("final z_positions are %s" % (z_pos))
-        configfile.set(section, "points", p_pt)
-        self.ad_gcmd.respond_info("final probe points are %s" % (p_pt))
         self.gcode.respond_info(
             "The SAVE_CONFIG command will update the printer config\n"
             "file with these parameters and restart the printer.")
