@@ -32,6 +32,7 @@ class ForceMove:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.steppers = {}
+        self.enable_lines = {}
         # Setup iterative solver
         ffi_main, ffi_lib = chelper.get_ffi()
         self.trapq = ffi_main.gc(ffi_lib.trapq_alloc(), ffi_lib.trapq_free)
@@ -149,34 +150,18 @@ class ForceMove:
             "file with these parameters and restart the printer.")
     cmd_SET_STEP_DIST_help = "Modify stepper step distance"
     def cmd_SET_STEP_DIST(self, gcmd):
-        choice = gcmd.get_float('CHOICE', None, above=0.)
         dist = gcmd.get_float('DISTANCE', None, above=0.)
-        if choice is None:
-            gcmd.respond_info("no stepper modifications")
+        stepper_name = gcmd.get('STEPPER')
+        if stepper_name not in self.enable_lines:
+            gcmd.respond_info('SET_STEP_DIST: Invalid stepper "%s"'
+                              % (stepper_name,))
             return
         if dist is None:
             gcmd.respond_info("no distance modified")
             return
-        if choice < 10 and dist is not none:
-            configfile.set("stepper_z", "rotation_distance", "%.6f" % (dist,))
-            gcmd.respond_info("stepper_z ' rotation distance set to %0.6f"
+        configfile.set(stepper_name, 'rotation_distance',"%.3f" % (dist,))
+        gcmd.respond_info("stepper_z ' rotation distance set to %0.6f"
                           % (dist))
-            return
-        if 10 < choice < 20 and dist is not none:
-            configfile.set("stepper_z1", "rotation_distance", "%.6f" % (dist,))
-            gcmd.respond_info("stepper_z1 ' rotation distance set to %0.6f"
-                          % (dist))
-            return
-        if 20 < choice < 30 and dist is not none:
-            configfile.set("stepper_z2", "rotation_distance", "%.6f" % (dist,))
-            gcmd.respond_info("stepper_z2 ' rotation distance set to %0.6f"
-                          % (dist))
-            return
-        if 30 < choice < 40 and dist is not none:
-            configfile.set("stepper_z3", "rotation_distance", "%.6f" % (dist,))
-            gcmd.respond_info("stepper_z3 ' rotation distance set to %0.6f"
-                          % (dist))
-            return
     cmd_SET_KINEMATIC_POSITION_help = "Force a low-level kinematic position"
     def cmd_SET_KINEMATIC_POSITION(self, gcmd):
         toolhead = self.printer.lookup_object('toolhead')
