@@ -158,17 +158,17 @@ class ForceMove:
             gcmd.respond_info("stepper_z ' rotation distance set to %0.6f"
                           % (dist))
             return
-         if choice == 2 and dist is not none:
+        if choice == 2 and dist is not none:
             configfile.set("stepper_z1", "rotation_distance", "%.6f" % (dist,))
             gcmd.respond_info("stepper_z1 ' rotation distance set to %0.6f"
                           % (dist))
             return
-         if choice == 3 and dist is not none:
+        if choice == 3 and dist is not none:
             configfile.set("stepper_z2", "rotation_distance", "%.6f" % (dist,))
             gcmd.respond_info("stepper_z2 ' rotation distance set to %0.6f"
                           % (dist))
             return
-         if choice == 4 and dist is not none:
+        if choice == 4 and dist is not none:
             configfile.set("stepper_z3", "rotation_distance", "%.6f" % (dist,))
             gcmd.respond_info("stepper_z3 ' rotation distance set to %0.6f"
                           % (dist))
