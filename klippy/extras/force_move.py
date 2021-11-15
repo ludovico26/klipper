@@ -55,7 +55,7 @@ class ForceMove:
                                    desc=self.cmd_MODIFY_ROTATION_help)
             gcode.register_command('SET_STEP_DIST', self.cmd_SET_STEP_DIST,
                                    desc=self.cmd_SET_STEP_DIST_help)
-            gcode.register_command('CHANGE_STEP_DIST',
+            gcode.register_mux_command('CHANGE_STEP_DIST', "STEPPER",
                                    self.name, self.cmd_CHANGE_STEP_DIST,
                                    desc=self.cmd_CHANGE_STEP_DIST)
     def register_stepper(self, config, mcu_stepper):
