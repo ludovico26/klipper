@@ -169,14 +169,14 @@ class ForceMove:
     cmd_CHANGE_STEP_DIST_help = "Modify stepper step distance"
     def cmd_CHANGE_STEP_DIST(self, gcmd):
         dist = gcmd.get_float('DISTANCE', None, above=0.)
-        toolhead = self.printer.lookup_object('toolhead')
+        #toolhead = self.printer.lookup_object('toolhead')
         dist = gcmd.get_float('DISTANCE', None, above=0.)
         if dist is None:
             step_dist = self.stepper.get_step_dist()
             gcmd.respond_info("Extruder '%s' step distance is %0.6f"
                               % (self.name, step_dist))
             return
-        toolhead.flush_step_generation()
+        #toolhead.flush_step_generation()
         #self.stepper.set_step_dist(dist)
         gcmd.respond_info("Extruder '%s' step distance set to %0.6f"
                           % (self.name, dist))
