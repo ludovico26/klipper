@@ -179,7 +179,7 @@ class ForceMove:
         toolhead.flush_step_generation()
         #self.stepper.set_step_dist(dist)
         gcmd.respond_info("Extruder '%s' step distance set to %0.6f"
-                          % (self.name, dist))  
+                          % (self.name, dist))
     cmd_SET_KINEMATIC_POSITION_help = "Force a low-level kinematic position"
     def cmd_SET_KINEMATIC_POSITION(self, gcmd):
         toolhead = self.printer.lookup_object('toolhead')
