@@ -140,7 +140,7 @@ class ForceMove:
             return
         toolhead.flush_step_generation()
         configfile = self.printer.lookup_object('configfile')
-        configfile.set(stepper_name, "rotation_distance", rotation)
+        configfile.set('%s', "rotation_distance", "%0.6f" % (stepper_name, rotation) )
         gcmd.respond_info("stepper '%s' rotation distance set to %0.6f"
                           % (stepper_name, rotation))
         self.gcode.respond_info(
