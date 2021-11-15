@@ -55,9 +55,6 @@ class ForceMove:
                                    desc=self.cmd_MODIFY_ROTATION_help)
             gcode.register_command('SET_STEP_DIST', self.cmd_SET_STEP_DIST,
                                    desc=self.cmd_SET_STEP_DIST_help)
-            gcode.register_mux_command('CHANGE_STEP_DIST', "STEPPER",
-                                   self.name, self.cmd_CHANGE_STEP_DIST,
-                                   desc=self.cmd_CHANGE_STEP_DIST)
     def register_stepper(self, config, mcu_stepper):
         self.steppers[mcu_stepper.get_name()] = mcu_stepper
     def lookup_stepper(self, name):
@@ -166,20 +163,6 @@ class ForceMove:
         configfile.set(stepper_name, 'rotation_distance',"%.3f" % (dist,))
         gcmd.respond_info("stepper_z ' rotation distance set to %0.6f"
                           % (dist))
-    cmd_CHANGE_STEP_DIST_help = "Modify stepper step distance"
-    def cmd_CHANGE_STEP_DIST(self, gcmd):
-        dist = gcmd.get_float('DISTANCE', None, above=0.)
-        #toolhead = self.printer.lookup_object('toolhead')
-        dist = gcmd.get_float('DISTANCE', None, above=0.)
-        if dist is None:
-            step_dist = self.stepper.get_step_dist()
-            gcmd.respond_info("Extruder '%s' step distance is %0.6f"
-                              % (self.name, step_dist))
-            return
-        #toolhead.flush_step_generation()
-        #self.stepper.set_step_dist(dist)
-        gcmd.respond_info("Extruder '%s' step distance set to %0.6f"
-                          % (self.name, dist))
     cmd_SET_KINEMATIC_POSITION_help = "Force a low-level kinematic position"
     def cmd_SET_KINEMATIC_POSITION(self, gcmd):
         toolhead = self.printer.lookup_object('toolhead')
