@@ -148,19 +148,31 @@ class ForceMove:
             "file with these parameters and restart the printer.")
     cmd_SET_STEP_DIST_help = "Modify stepper step distance"
     def cmd_SET_STEP_DIST(self, gcmd):
-        stepper = self._lookup_stepper(gcmd)
+        choice = gcmd.get_float('CHOICE', None, above=0.)
         dist = gcmd.get_float('DISTANCE', None, above=0.)
-        if dist is None:
-            step_dist = self.stepper.get_step_dist()
-            gcmd.respond_info("stepper '%s' step distance is %0.6f"
-                              % (stepper, step_dist))
+        if choice is None:
+            gcmd.respond_info("no stepper modifications")
             return
-        toolhead.flush_step_generation()
-        self.stepper.set_step_dist(dist)
-        gcmd.respond_info("stepper '%s' step distance set to %0.6f"
-                          % (self.name, dist))
-        logging.info("stepper '%s' step distance set to %0.6f"
-                          % (self.name, dist))
+        if choice = 1 and dist is not none:
+            configfile.set("stepper_z", "rotation_distance", "%.6f" % (dist,))
+            gcmd.respond_info("stepper_z ' rotation distance set to %0.6f"
+                          % (dist))
+            return
+         if choice = 2 and dist is not none:
+            configfile.set("stepper_z1", "rotation_distance", "%.6f" % (dist,))
+            gcmd.respond_info("stepper_z1 ' rotation distance set to %0.6f"
+                          % (dist))
+            return
+         if choice = 3 and dist is not none:
+            configfile.set("stepper_z2", "rotation_distance", "%.6f" % (dist,))
+            gcmd.respond_info("stepper_z2 ' rotation distance set to %0.6f"
+                          % (dist))
+            return
+         if choice = 4 and dist is not none:
+            configfile.set("stepper_z3", "rotation_distance", "%.6f" % (dist,))
+            gcmd.respond_info("stepper_z3 ' rotation distance set to %0.6f"
+                          % (dist))
+            return
     cmd_SET_KINEMATIC_POSITION_help = "Force a low-level kinematic position"
     def cmd_SET_KINEMATIC_POSITION(self, gcmd):
         toolhead = self.printer.lookup_object('toolhead')
