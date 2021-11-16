@@ -34,7 +34,7 @@ class CartKinematics:
         self.axes_min = toolhead.Coord(*[r[0] for r in ranges], e=0.)
         self.axes_max = toolhead.Coord(*[r[1] for r in ranges], e=0.)
         # Check for dual carriage support
-        gcode.register_mux_command("SET_DISTANCE", "STEPPER", self.rails,
+        gcode.register_command("SET_DISTANCE",
                                        self.cmd_default_SET_DISTANCE,
                                        desc=self.cmd_default_SET_DISTANCE_help)
         if config.has_section('dual_carriage'):
@@ -52,8 +52,11 @@ class CartKinematics:
                 desc=self.cmd_SET_DUAL_CARRIAGE_help)
     cmd_default_SET_DISTANCE_help = "Modify stepper step distance"
     def cmd_default_SET_DISTANCE(self, gcmd):
-        gcmd.respond_info("stepper '%s' rotation distance "
-                          % (self.rails, ))
+         stepper_name = gcmd.get('STEPPER', None)
+        if stepper_name not in self.rails:
+            gcmd.respond_info('SET_STEPPER_ENABLE: Invalid stepper "%s"'
+                              % (stepper_name,))
+            return
     def get_steppers(self):
         rails = self.rails
         if self.dual_carriage_axis is not None:
