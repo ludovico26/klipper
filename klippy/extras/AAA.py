@@ -27,7 +27,12 @@ class ModifyRotation:
         self.stepper.set_step_dist(dist)
         gcmd.respond_info("Stepper_z '%s' step distance set to %0.6f"
                           % (self.name, dist))
-    def add_printer_objects(config):
+    def get_name(self):
+        return self.name
+def load_config(config):
+    return ModifyRotation(config)
+
+def add_printer_objects(config):
     printer = config.get_printer()
     for i in range(99):
         section = 'stepper_z'
@@ -37,7 +42,3 @@ class ModifyRotation:
             break
         pe = ModifyRotation(config.getsection(section), i)
         printer.add_object(section, pe)
-    def get_name(self):
-        return self.name
-def load_config(config):
-    return ModifyRotation(config)
