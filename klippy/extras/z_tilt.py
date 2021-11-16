@@ -127,6 +127,7 @@ class RetryHelper:
 class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
+        self.section=config.get_name()
         self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
         self.retry_helper = RetryHelper(config)
@@ -143,7 +144,8 @@ class ZTilt:
     cmd_Z_TILT_MODIFY_help = "Adjust the Z tilt"
     def cmd_Z_TILT_MODIFY(self, gcmd):
         configfile = self.printer.lookup_object('configfile')
-        section = self.section
+        section= self.section
+        self.ad_gcmd = gcmd
         s_zpos = ""
         for i in self.z_positions:
             s_zpos += "10, 20\n"
