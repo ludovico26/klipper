@@ -26,3 +26,6 @@ GET_POSITION
 
 # Run again in automatic mode
 Z_TILT_ADJUST
+
+#MY CHANGES EXAMPLE...
+Z_TILT_MODIFY
