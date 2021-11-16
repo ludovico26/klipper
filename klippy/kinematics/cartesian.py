@@ -10,7 +10,7 @@ class CartKinematics:
     def __init__(self, toolhead, config):
         self.printer = config.get_printer()
         self.name = config.get_name()
-        self.stepper = stepper.PrinterStepper(config)
+        #self.stepper = stepper.PrinterStepper(config)
         # Setup axis rails
         self.dual_carriage_axis = None
         self.dual_carriage_rails = []
@@ -37,8 +37,6 @@ class CartKinematics:
         gcode.register_mux_command("SET_NEW_DISTANCE", "STEPPER",
                                    self.name, self.cmd_SET_NEW_DISTANCE,
                                    desc=self.cmd_SET_NEW_DISTANCE_help)
-        gcode.register_command('MODIFY_ROTATION', self.cmd_MODIFY_ROTATION,
-                                   desc=self.cmd_MODIFY_ROTATION_help)
         if config.has_section('dual_carriage'):
             dc_config = config.getsection('dual_carriage')
             dc_axis = dc_config.getchoice('axis', {'x': 'x', 'y': 'y'})
@@ -146,39 +144,16 @@ class CartKinematics:
         self._activate_carriage(carriage)
     cmd_SET_NEW_DISTANCE_help = "Modify stepper step distance"
     def cmd_SET_NEW_DISTANCE(self, gcmd):
-        toolhead = self.printer.lookup_object('toolhead')
+        #toolhead = self.printer.lookup_object('toolhead')
         dist = gcmd.get_float('DISTANCE', None, above=0.)
         if dist is None:
             step_dist = self.stepper.get_step_dist()
-            gcmd.respond_info("Extruder '%s' step distance is %0.6f"
+            gcmd.respond_info("Stepper '%s' step distance is %0.6f"
                               % (self.name, step_dist))
             return
-        toolhead.flush_step_generation()
-        self.stepper.set_step_dist(dist)
+        #toolhead.flush_step_generation()
+        #self.stepper.set_step_dist(dist)
         gcmd.respond_info("Stepper '%s' step distance set to %0.3f"
                           % (self.name, dist))
-    cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
-    def cmd_MODIFY_ROTATION(self, gcmd):
-        stepper_name = gcmd.get('STEPPER', None)
-        rotation = gcmd.get_float('NEW_ROTATION', None, above=0.)
-        toolhead = self.printer.lookup_object('toolhead')
-        if stepper_name not in self.steppers:
-            gcmd.respond_info('SET_STEPPER_DISTANCE: Invalid stepper "%s"'
-                              % (stepper_name,))
-            return
-        if rotation is None:
-            step_dist = self.stepper.get_step_dist()
-            gcmd.respond_info("stepper '%s' step distance is %0.6f"
-                              % (stepper_name, step_dist))
-            return
-        toolhead.flush_step_generation()
-        configfile = self.printer.lookup_object('configfile')
-        configfile.set(stepper_name, "rotation_distance", "%0.3f"
-                       % (rotation,))
-        gcmd.respond_info("stepper '%s' rotation distance set to %0.6f"
-                          % (stepper_name, rotation))
-        self.gcode.respond_info(
-            "The SAVE_CONFIG command will update the printer config\n"
-            "file with these parameters and restart the printer.")
 def load_kinematics(toolhead, config):
     return CartKinematics(toolhead, config)
