@@ -12,7 +12,7 @@ class ModifyRotation:
         if self.name == 'stepper_z':
             gcode.register_mux_command("SET_Z_DISTANCE",
                                        "STEPPER_Z",self.name,
-                                       self.cmd_SET_Z_DISTANCE
+                                       self.cmd_SET_Z_DISTANCE,
                                    desc=self.cmd_SET_Z_DISTANCE_help)
     cmd_SET_Z_DISTANCE_help = "Set extruder step distance"
     def cmd_SET_Z_DISTANCE(self, gcmd):
