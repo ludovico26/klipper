@@ -34,6 +34,9 @@ class CartKinematics:
         self.axes_min = toolhead.Coord(*[r[0] for r in ranges], e=0.)
         self.axes_max = toolhead.Coord(*[r[1] for r in ranges], e=0.)
         # Check for dual carriage support
+        gcode.register_mux_command("SET_DISTANCE", "STEPPER", self.name,
+                                       self.cmd_default_SET_DISTANCE,
+                                       desc=self.cmd_default_SET_DISTANCE_help)
         if config.has_section('dual_carriage'):
             dc_config = config.getsection('dual_carriage')
             dc_axis = dc_config.getchoice('axis', {'x': 'x', 'y': 'y'})
@@ -47,6 +50,11 @@ class CartKinematics:
             self.printer.lookup_object('gcode').register_command(
                 'SET_DUAL_CARRIAGE', self.cmd_SET_DUAL_CARRIAGE,
                 desc=self.cmd_SET_DUAL_CARRIAGE_help)
+    
+    cmd_default_SET_DISTANCE_help = "Modify stepper step distance"
+    def cmd_default_SET_DISTANCE(self, gcmd):
+        gcmd.respond_info("stepper '%s' rotation distance "
+                          % (self.name, ))
     def get_steppers(self):
         rails = self.rails
         if self.dual_carriage_axis is not None:
