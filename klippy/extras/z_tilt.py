@@ -170,7 +170,11 @@ class ZTilt:
                           % (section))
     cmd_PROVA3_help = "Z tilt"
     def cmd_PROVA3(self, gcmd):
-        z_pos=2
+        z_pos=gcmd.get_float(DISTANCE', None, above=0.)
+        if z_pos is None:
+            gcmd.respond_info("Eroor distance %0.3f"
+                              % (z_pos))
+            return
         configfile = self.printer.lookup_object('configfile')
         configfile.set('stepper_z', 'position_endstop', "%.3f" %(z_pos,))
         gcmd.respond_info("final ")
@@ -178,12 +182,13 @@ class ZTilt:
     def cmd_Z_TILT_MODIFY(self, gcmd):
         configfile = self.printer.lookup_object('configfile')
         section= self.section
-        self.ad_gcmd = gcmd
         s_zpos = ""
+        zpos=[]
+        zpos=self.z_positions
+        self.ad_gcmd = gcmd
         for i in self.z_positions:
-            s_zpos += "10, 20\n"
-        configfile.set(section, "z_positions", s_zpos)
-        self.ad_gcmd.respond_info("final z_positions are %s" % (s_zpos))
+            s_zpos += "%.6f, %.6f\n" % tuple(zpos)
+        gcmd.respond_info("final z_positions are %s" % (s_zpos))
         self.ad_gcmd.respond_info(
           "The SAVE_CONFIG command will update the printer config\n"
           "file with these parameters and restart the printer.")
