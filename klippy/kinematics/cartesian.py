@@ -152,7 +152,7 @@ class CartKinematics:
                               % (self.name, step_dist))
             return
         toolhead.flush_step_generation()
-        self.stepper.set_step_dist(dist)
+        #self.stepper.set_step_dist(dist)
         gcmd.respond_info("Stepper '%s' step distance set to %0.6f"
                           % (self.name, dist))
 def load_kinematics(toolhead, config):
