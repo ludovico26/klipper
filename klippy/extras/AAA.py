@@ -8,9 +8,11 @@ class ModifyRotation:
         toolhead = self.printer.lookup_object('toolhead')
         self.stepper = stepper.PrinterStepper(config)
         toolhead = self.printer.lookup_object('toolhead')
+        gcode = self.printer.lookup_object('gcode')
         if self.name == 'stepper_z':
-            gcode.register_mux_command("SET_EXTRUDER_STEP_DISTANCE", "STEPPER_Z",
-                                   self.name, self.cmd_SET_Z_DISTANCE,
+            gcode.register_mux_command("SET_Z_DISTANCE",
+                                       "STEPPER_Z",self.name,
+                                       self.cmd_SET_Z_DISTANCE
                                    desc=self.cmd_SET_Z_DISTANCE_help)
     cmd_SET_Z_DISTANCE_help = "Set extruder step distance"
     def cmd_SET_Z_DISTANCE(self, gcmd):
