@@ -51,6 +51,8 @@ class ForceMove:
             gcode.register_command('SET_KINEMATIC_POSITION',
                                    self.cmd_SET_KINEMATIC_POSITION,
                                    desc=self.cmd_SET_KINEMATIC_POSITION_help)
+            gcode.register_command('MODIFY_ROTATION', self.cmd_MODIFY_ROTATION,
+                                   desc=self.cmd_MODIFY_ROTATION_help)
     def register_stepper(self, config, mcu_stepper):
         self.steppers[mcu_stepper.get_name()] = mcu_stepper
     def lookup_stepper(self, name):
@@ -133,6 +135,27 @@ class ForceMove:
         z = gcmd.get_float('Z', curpos[2])
         logging.info("SET_KINEMATIC_POSITION pos=%.3f,%.3f,%.3f", x, y, z)
         toolhead.set_position([x, y, z, curpos[3]], homing_axes=(0, 1, 2))
+    cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
+    def cmd_MODIFY_ROTATION(self, gcmd):
+        stepper_name = gcmd.get('STEPPER', None)
+        rotation = gcmd.get_float('NEW_ROTATION', None, above=0.)
+        toolhead = self.printer.lookup_object('toolhead')
+        if stepper_name not in self.steppers:
+            gcmd.respond_info('SET_STEPPER_DISTANCE: Invalid stepper "%s"'
+                              % (stepper_name,))
+            return
+        if rotation is None:
+            gcmd.respond_info("no distance modified")
+            return
+        toolhead.flush_step_generation()
+        configfile = self.printer.lookup_object('configfile')
+        configfile.set('%s', "rotation_distance", "%0.6f"
+                       % (stepper_name, rotation))
+        gcmd.respond_info("stepper '%s' rotation distance set to %0.6f"
+                          % (stepper_name, rotation))
+        self.gcode.respond_info(
+            "The SAVE_CONFIG command will update the printer config\n"
+            "file with these parameters and restart the printer.")
 
 def load_config(config):
     return ForceMove(config)
