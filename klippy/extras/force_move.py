@@ -151,7 +151,7 @@ class ForceMove:
         configfile = self.printer.lookup_object('configfile')
         configfile.set('%s', "rotation_distance", "%0.6f"
                        % (stepper_name, rotation))
-        gcmd.respond_info("stepper '%s' rotation distance set to %0.6f"
+        gcmd.respond_info("stepper ['%s'] rotation distance set to %0.6f"
                           % (stepper_name, rotation))
         self.gcode.respond_info(
             "The SAVE_CONFIG command will update the printer config\n"
