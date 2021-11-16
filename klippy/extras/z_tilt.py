@@ -147,6 +147,8 @@ class ZTilt:
                                desc=self.cmd_PROVA1_help)
         gcode.register_command('PROVA2', self.cmd_PROVA2,
                                desc=self.cmd_PROVA2_help)
+        gcode.register_command('PROVA3', self.cmd_PROVA3,
+                               desc=self.cmd_PROVA3_help)
     cmd_PROVA_help = " Z tilt"
     def cmd_PROVA(self, gcmd):
         section=self.section
@@ -157,7 +159,7 @@ class ZTilt:
     def cmd_PROVA1(self, gcmd):
         configfile = self.printer.lookup_object('configfile')
         value=4
-        configfile.set(section, "retries", "%.3f" (value,))
+        configfile.set(section, "retries", "%.3f" %(value,))
         gcmd.respond_info("final z_positions are %s"
                           % (section))
     cmd_PROVA2_help = "Z tilt"
@@ -166,6 +168,12 @@ class ZTilt:
         configfile.set("z_tilt", "retries", "6")
         gcmd.respond_info("final z_positions are %s"
                           % (section))
+    cmd_PROVA3_help = "Z tilt"
+    def cmd_PROVA3(self, gcmd):
+        z_pos=2
+        configfile = self.printer.lookup_object('configfile')
+        configfile.set('stepper_z', 'position_endstop', "%.3f" %(z_pos,))
+        gcmd.respond_info("final ")
     cmd_Z_TILT_MODIFY_help = "Adjust the Z tilt"
     def cmd_Z_TILT_MODIFY(self, gcmd):
         configfile = self.printer.lookup_object('configfile')
