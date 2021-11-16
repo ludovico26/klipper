@@ -1,4 +1,5 @@
 import logging
+import stepper
 
 class RotationDistanceModifier:
     def _init_(self,config):
