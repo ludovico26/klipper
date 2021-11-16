@@ -144,11 +144,9 @@ class ZTilt:
     def cmd_Z_TILT_MODIFY(self, gcmd):
         configfile = self.printer.lookup_object('configfile')
         section = self.section
-        z_pos=[]
-        z_pos=self.z_positions
         s_zpos = ""
-        for zpos in self.z_positions:
-            s_zpos += "%.6f, %.6f\n" % tuple(zpos)
+        for i in self.z_positions:
+            s_zpos += "10, 20\n"
         configfile.set(section, "z_positions", s_zpos)
         self.ad_gcmd.respond_info("final z_positions are %s" % (s_zpos))
         self.ad_gcmd.respond_info(
