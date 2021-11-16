@@ -185,11 +185,10 @@ class ZTilt:
         s_zpos = ""
         zpos=[]
         zpos=self.z_positions
-        self.ad_gcmd = gcmd
         for i in self.z_positions:
             s_zpos += "%.6f, %.6f\n" % tuple(zpos)
         gcmd.respond_info("final z_positions are %s" % (s_zpos))
-        self.ad_gcmd.respond_info(
+        gcmd.respond_info(
           "The SAVE_CONFIG command will update the printer config\n"
           "file with these parameters and restart the printer.")
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
