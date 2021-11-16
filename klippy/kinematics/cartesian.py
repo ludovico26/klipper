@@ -50,7 +50,6 @@ class CartKinematics:
             self.printer.lookup_object('gcode').register_command(
                 'SET_DUAL_CARRIAGE', self.cmd_SET_DUAL_CARRIAGE,
                 desc=self.cmd_SET_DUAL_CARRIAGE_help)
-    
     cmd_default_SET_DISTANCE_help = "Modify stepper step distance"
     def cmd_default_SET_DISTANCE(self, gcmd):
         gcmd.respond_info("stepper '%s' rotation distance "
