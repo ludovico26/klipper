@@ -53,7 +53,7 @@ class CartKinematics:
     cmd_default_SET_DISTANCE_help = "Modify stepper step distance"
     def cmd_default_SET_DISTANCE(self, gcmd):
          stepper_name = gcmd.get('STEPPER', None)
-        if stepper_name not in self.rails:
+         if stepper_name not in self.rails:
             gcmd.respond_info('SET_STEPPER_ENABLE: Invalid stepper "%s"'
                               % (stepper_name,))
             return
