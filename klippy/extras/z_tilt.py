@@ -170,7 +170,7 @@ class ZTilt:
                           % (section))
     cmd_PROVA3_help = "Z tilt"
     def cmd_PROVA3(self, gcmd):
-        z_pos=gcmd.get_float(DISTANCE', None, above=0.)
+        z_pos=gcmd.get_float('DISTANCE', None, above=0.)
         if z_pos is None:
             gcmd.respond_info("Eroor distance %0.3f"
                               % (z_pos))
