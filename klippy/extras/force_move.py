@@ -144,6 +144,46 @@ class ForceMove:
         offsets[2]= gcmd.get_float('C', 0., above=0.)
         offsets[3]= gcmd.get_float('D', 0., above=0.)
         logging.info("issuing differen movement for z steppers")
-        self.z_helper.adjust_steppers(offsets, speed)
+        self.move_z_steppers(offsets, speed)
+    def move_z_steppers(self, adjustments, speed):
+        toolhead = self.printer.lookup_object('toolhead')
+        gcode = self.printer.lookup_object('gcode')
+        self.z_steppers = []
+        curpos = toolhead.get_position()
+        # Report on movements
+        stepstrs = ["%s = %.6f" % (s.get_name(), a)
+                    for s, a in zip(self.z_steppers, adjustments)]
+        msg = "Making the following Z Movements:\n%s" % ("\n".join(stepstrs),)
+        gcode.respond_info(msg)
+        # Disable Z stepper movements
+        toolhead.flush_step_generation()
+        for s in self.z_steppers:
+            s.set_trapq(None)
+        # Move each z stepper (sorted from lowest to highest) until they match
+        positions = [(-a, s) for a, s in zip(adjustments, self.z_steppers)]
+        positions.sort()
+        first_stepper_offset, first_stepper = positions[0]
+        z_low = curpos[2] - first_stepper_offset
+        for i in range(len(positions)-1):
+            stepper_offset, stepper = positions[i]
+            next_stepper_offset, next_stepper = positions[i+1]
+            toolhead.flush_step_generation()
+            stepper.set_trapq(toolhead.get_trapq())
+            curpos[2] = z_low + next_stepper_offset
+            try:
+                toolhead.move(curpos, speed)
+                toolhead.set_position(curpos)
+            except:
+                logging.exception("ZAdjustHelper adjust_steppers")
+                toolhead.flush_step_generation()
+                for s in self.z_steppers:
+                    s.set_trapq(toolhead.get_trapq())
+                raise
+        # Z should now be level - do final cleanup
+        last_stepper_offset, last_stepper = positions[-1]
+        toolhead.flush_step_generation()
+        last_stepper.set_trapq(toolhead.get_trapq())
+        curpos[2] += first_stepper_offset
+        toolhead.set_position(curpos)    
 def load_config(config):
     return ForceMove(config)
