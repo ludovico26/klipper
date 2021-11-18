@@ -137,25 +137,13 @@ class ForceMove:
         toolhead.set_position([x, y, z, curpos[3]], homing_axes=(0, 1, 2))
     cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
     def cmd_MODIFY_ROTATION(self, gcmd):
-        stepper_name = gcmd.get('STEPPER', None)
-        rotation = gcmd.get_float('NEW_ROTATION', None, above=0.)
-        toolhead = self.printer.lookup_object('toolhead')
-        if stepper_name not in self.steppers:
-            gcmd.respond_info('SET_STEPPER_DISTANCE: Invalid stepper "%s"'
-                              % (stepper_name,))
-            return
-        if rotation is None:
-            gcmd.respond_info("no distance modified")
-            return
-        toolhead.flush_step_generation()
-        configfile = self.printer.lookup_object('configfile')
-        configfile.set('stepper_x', "rotation_distance", "%0.6f"
-                       % (rotation,))
-        gcmd.respond_info("stepper ['%s'] rotation distance set to %0.6f"
-                          % (stepper_name, rotation))
-        self.gcode.respond_info(
-            "The SAVE_CONFIG command will update the printer config\n"
-            "file with these parameters and restart the printer.")
-
+        speed= gcmd.get_float('SPEED', 5., above=0.)
+        offsets=[]
+        offsets[0]= gcmd.get_float('A', 0., above=0.)
+        offsets[1]= gcmd.get_float('B', 0., above=0.)
+        offsets[2]= gcmd.get_float('C', 0., above=0.)
+        offsets[3]= gcmd.get_float('D', 0., above=0.)
+        logging.info("issuing differen movement for z steppers")
+        self.z_helper.adjust_steppers(offsets, speed)
 def load_config(config):
     return ForceMove(config)
