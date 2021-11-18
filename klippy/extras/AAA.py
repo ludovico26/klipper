@@ -31,14 +31,3 @@ class ModifyRotation:
         return self.name
 def load_config(config):
     return ModifyRotation(config)
-
-def add_printer_objects(config):
-    printer = config.get_printer()
-    for i in range(99):
-        section = 'stepper_z'
-        if i:
-            section = 'stepper_z%d' % (i,)
-        if not config.has_section(section):
-            break
-        pe = ModifyRotation(config.getsection(section), i)
-        printer.add_object(section, pe)
