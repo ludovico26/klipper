@@ -138,12 +138,12 @@ class ForceMove:
     cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
     def cmd_MODIFY_ROTATION(self, gcmd):
         speed= gcmd.get_float('SPEED', 5., above=0.)
-        offsets=[]
-        offsets[0]= gcmd.get_float('A', 0., above=0.)
-        offsets[1]= gcmd.get_float('B', 0., above=0.)
-        offsets[2]= gcmd.get_float('C', 0., above=0.)
-        offsets[3]= gcmd.get_float('D', 0., above=0.)
-        logging.info("issuing differen movement for z steppers")
+        adjustments=[]
+        adjustments[0]= gcmd.get_float('A', 0., above=0.)
+        adjustments[1]= gcmd.get_float('B', 0., above=0.)
+        adjustments[2]= gcmd.get_float('C', 0., above=0.)
+        adjustments[3]= gcmd.get_float('D', 0., above=0.)
+        logging.info("issuing different movement for z steppers")
         self.move_z_steppers(offsets, speed)
     def move_z_steppers(self, adjustments, speed):
         toolhead = self.printer.lookup_object('toolhead')
