@@ -137,53 +137,35 @@ class ForceMove:
         toolhead.set_position([x, y, z, curpos[3]], homing_axes=(0, 1, 2))
     cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
     def cmd_MODIFY_ROTATION(self, gcmd):
+        my_stepper=[]
+        my_stepper[0]="stepper_z"
+        my_stepper[1]="stepper_z1"
+        my_stepper[2]="stepper_z2"
+        my_stepper[3]="stepper_z3"
         speed= gcmd.get_float('SPEED', 5., above=0.)
-        adjustments=[]
-        adjustments[0]= gcmd.get_float('A', 0., above=0.)
-        adjustments[1]= gcmd.get_float('B', 0., above=0.)
-        adjustments[2]= gcmd.get_float('C', 0., above=0.)
-        adjustments[3]= gcmd.get_float('D', 0., above=0.)
+        movements=[]
+        movements[0]= gcmd.get_float('A', 0., above=0.)
+        movements[1]= gcmd.get_float('B', 0., above=0.)
+        movements[2]= gcmd.get_float('C', 0., above=0.)
+        movements[3]= gcmd.get_float('D', 0., above=0.)
         logging.info("issuing different movement for z steppers")
-        self.move_z_steppers(offsets, speed)
-    def move_z_steppers(self, adjustments, speed):
+        self.move_z_steppers(my_stepper,movements, speed)
+    def move_z_steppers(self, stepper, dist, speed, accel=0.):
         toolhead = self.printer.lookup_object('toolhead')
-        gcode = self.printer.lookup_object('gcode')
-        self.z_steppers = []
-        curpos = toolhead.get_position()
-        # Report on movements
-        stepstrs = ["%s = %.6f" % (s.get_name(), a)
-                    for s, a in zip(self.z_steppers, adjustments)]
-        msg = "Making the following Z Movements:\n%s" % ("\n".join(stepstrs),)
-        gcode.respond_info(msg)
-        # Disable Z stepper movements
         toolhead.flush_step_generation()
-        for s in self.z_steppers:
-            s.set_trapq(None)
-        # Move each z stepper (sorted from lowest to highest) until they match
-        positions = [(-a, s) for a, s in zip(adjustments, self.z_steppers)]
-        positions.sort()
-        first_stepper_offset, first_stepper = positions[0]
-        z_low = curpos[2] - first_stepper_offset
-        for i in range(len(positions)-1):
-            stepper_offset, stepper = positions[i]
-            next_stepper_offset, next_stepper = positions[i+1]
-            toolhead.flush_step_generation()
-            stepper.set_trapq(toolhead.get_trapq())
-            curpos[2] = z_low + next_stepper_offset
-            try:
-                toolhead.move(curpos, speed)
-                toolhead.set_position(curpos)
-            except:
-                logging.exception("ZAdjustHelper adjust_steppers")
-                toolhead.flush_step_generation()
-                for s in self.z_steppers:
-                    s.set_trapq(toolhead.get_trapq())
-                raise
-        # Z should now be level - do final cleanup
-        last_stepper_offset, last_stepper = positions[-1]
-        toolhead.flush_step_generation()
-        last_stepper.set_trapq(toolhead.get_trapq())
-        curpos[2] += first_stepper_offset
-        toolhead.set_position(curpos)
+        prev_sk = stepper.set_stepper_kinematics(self.stepper_kinematics)
+        prev_trapq = stepper.set_trapq(self.trapq)
+        stepper.set_position((0., 0., 0.))
+        axis_r, accel_t, cruise_t, cruise_v = calc_move_time(dist, speed, accel)
+        print_time = toolhead.get_last_move_time()
+        self.trapq_append(self.trapq, print_time, accel_t, cruise_t, accel_t,
+                          0., 0., 0., axis_r, 0., 0., 0., cruise_v, accel)
+        print_time = print_time + accel_t + cruise_t + accel_t
+        stepper.generate_steps(print_time)
+        self.trapq_finalize_moves(self.trapq, print_time + 99999.9)
+        stepper.set_trapq(prev_trapq)
+        stepper.set_stepper_kinematics(prev_sk)
+        toolhead.note_kinematic_activity(print_time)
+        toolhead.dwell(accel_t + cruise_t + accel_t)
 def load_config(config):
     return ForceMove(config)
