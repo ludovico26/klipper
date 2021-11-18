@@ -184,6 +184,6 @@ class ForceMove:
         toolhead.flush_step_generation()
         last_stepper.set_trapq(toolhead.get_trapq())
         curpos[2] += first_stepper_offset
-        toolhead.set_position(curpos)    
+        toolhead.set_position(curpos)
 def load_config(config):
     return ForceMove(config)
