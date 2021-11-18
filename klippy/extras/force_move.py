@@ -142,7 +142,11 @@ class ForceMove:
         my_stepper[1]="stepper_z1"
         my_stepper[2]="stepper_z2"
         my_stepper[3]="stepper_z3"
-        speed= gcmd.get_float('SPEED', 5., above=0.)
+        speed= []
+        speed[0]=gcmd.get_float('SPEED', 0., above=0.)
+        speed[1]=3
+        speed[2]=3
+        speed[3]=3
         movements=[]
         movements[0]= gcmd.get_float('A', 0., above=0.)
         movements[1]= gcmd.get_float('B', 0., above=0.)
