@@ -210,6 +210,6 @@ class ZTilt:
         return self.z_status.check_retry_result(
             self.retry_helper.check_retry([p[2] for p in positions]))
         def get_status(self, eventtime):
-            return self.z_status.get_status(eventtime)       
+            return self.z_status.get_status(eventtime)
 def load_config(config):
     return ZTilt(config)
