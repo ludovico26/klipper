@@ -158,7 +158,6 @@ class ZTilt:
         logging.info("modifying probe points")
         #comment zpos = (num1, num2)
         zpos=self.z_positions
-        zpos=
         s_zpos = ""
         for zpos in self.z_positions:
             s_zpos += "%.6f, %.6f\n" % tuple(zpos)
