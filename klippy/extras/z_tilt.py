@@ -183,7 +183,8 @@ class ZTilt:
             s_zpos += "%.6f, %.6f\n" % tuple(zpos)
         configfile = self.printer.lookup_object('configfile')
         section = self.section
-        configfile.set(section, "points", p_pt)
+        pt="10, 15\n""10, 15\n""10, 15\n""10, 15\n"
+        configfile.set(section, "points", pt)
         gcmd.respond_info("final probe points are %s" % (p_pt))
     cmd_PROVA_help = " Z tilt"
     def cmd_PROVA(self, gcmd):
