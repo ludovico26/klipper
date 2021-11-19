@@ -59,23 +59,19 @@ class ForceMove:
     cmd_SET_STEP_DISTANCE_help = "Set step dist of individual stepper"
     def cmd_SET_STEP_DISTANCE(self, gcmd):
         toolhead = self.printer.lookup_object('toolhead')
-        stepper_name = gcmd.get('STEPPER', None)
+        stepper = self._lookup_stepper(gcmd)
         dist = gcmd.get_float('DISTANCE', None, above=0.)
-        if stepper_name not in self.steppers:
-            gcmd.respond_info('SET_STEPPER_ENABLE: Invalid stepper "%s"'
-                              % (stepper_name,))
-            return
         if dist is None:
             step_dist = self.stepper.get_step_dist()
             gcmd.respond_info("stepper '%s' step distance is %0.6f"
-                              % (self.name, step_dist))
+                              % (stepper, step_dist))
             return
         toolhead.flush_step_generation()
-        self.stepper.set_step_dist(dist)
+        stepper.set_step_dist(dist)
         rotation_dist = gcmd.get_float('DISTANCE', above=0.)
         gcmd.respond_info(
             "stepper '%s' step distance set to %0.6f"
-            % (self.name, dist))
+            % (stepper, dist))
     def register_stepper(self, config, mcu_stepper):
         self.steppers[mcu_stepper.get_name()] = mcu_stepper
     def lookup_stepper(self, name):
