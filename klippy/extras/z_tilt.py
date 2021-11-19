@@ -162,10 +162,10 @@ class ZTilt:
         for zpos in self.z_positions:
             s_zpos += "%.6f, %.6f\n" % tuple(zpos)
         configfile.set(section, "z_positions", s_zpos)
-        self.ad_gcmd.respond_info("final z_positions are %s" % (s_zpos))
-                self.ad_gcmd.respond_info(
-                    "The SAVE_CONFIG command will update the printer config\n"
-                    "file with these parameters and restart the printer.")
+        gcmd.respond_info("final z_positions are %s" % (s_zpos))
+        gcmd.respond_info(
+            "The SAVE_CONFIG command will update the printer config\n"
+            "file with these parameters and restart the printer.")
     def update_z_positions(self, points, min_points):
         self.z_positins = points
         self.minimum_points(min_points)
