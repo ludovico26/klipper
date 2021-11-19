@@ -128,8 +128,25 @@ class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.section=config.get_name()
-        self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
+        zeroes=[]
+        self.z_offsets = config.get('z_offsets', None)
+        if (self.z_offsets is not None):
+            try:
+                self.z_offsets = [float(o.strip())
+                                  for o in self.z_offsets.split(',')]
+            except:
+                raise config.error("Unable to parse z_offsets in %s" % (
+                    config.get_name()))
+            if (len(self.z_offsets) !=
+                    len(z_steppers)):
+                raise config.error("The number of z_offsets must match the "
+                    "number of probe points in %s" % (config.get_name()))
+        self.z_pos = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
+        if self.z_offsets is none:
+            self.z_positions=self.z_pos
+        if self.z_offsets is not none:
+            self.z_positions=self.z_pos+ self.z_offsets
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
         self.probe_helper.minimum_points(2)
@@ -160,14 +177,15 @@ class ZTilt:
         offsets[1] = gcmd.get_float('B', 0., minval=-30,maxval=50)
         offsets[2] = gcmd.get_float('C', 0., minval=-10, maxval=50)
         offsets[3] = gcmd.get_float('D', 0., minval=-30,maxval=50)
+        ppt=[]
         p_pt[0][1]= p_pt[0][1] +offsets[0]
         p_pt[1][0]= p_pt[1][0] +offsets[1]
         p_pt[2][1]= p_pt[2][1] +offsets[2]
         p_pt[3][0]= p_pt[3][0] +offsets[3]
-       configfile = self.printer.lookup_object('configfile')
-       section = self.section
-       configfile.set(section, "points", p_pt)
-       gcmd.respond_info("final probe points are %s" % (p_pt))
+        configfile = self.printer.lookup_object('configfile')
+        section = self.section
+        configfile.set(section, "points", p_pt)
+        gcmd.respond_info("final probe points are %s" % (p_pt))
     cmd_Z_TILT_MODIFY_help = "modify Z tilt parameters"
     def cmd_Z_TILT_MODIFY(self, gcmd):
         logging.info("modifying z positions")
@@ -176,7 +194,14 @@ class ZTilt:
         offsets[1][0] = gcmd.get_float('B', 0., minval=-30,maxval=50)
         offsets[2][1] = gcmd.get_float('C', 0., minval=-10, maxval=50)
         offsets[3][0] = gcmd.get_float('D', 0., minval=-30,maxval=50)
-        self.z_positions += self.z_positions + offsets
+        #self.z_positions += self.z_positions + offsets
+        s_zpos = ""
+        for zpos in self.z_positions:
+            s_zpos += "%.6f, %.6f\n" % tuple(zpos)
+        configfile = self.printer.lookup_object('configfile')
+        section = self.section
+        configfile.set(section, "points", p_pt)
+        gcmd.respond_info("final probe points are %s" % (p_pt))
     cmd_PROVA_help = " Z tilt"
     def cmd_PROVA(self, gcmd):
         section=self.section
