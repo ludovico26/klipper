@@ -26,7 +26,6 @@ class ZAdjustHelper:
             raise self.printer.config_error(
                 "%s requires multiple z steppers" % (self.name,))
         self.z_steppers = z_steppers
-        
     def adjust_steppers(self, adjustments, speed):
         toolhead = self.printer.lookup_object('toolhead')
         gcode = self.printer.lookup_object('gcode')
@@ -171,18 +170,16 @@ class ZTilt:
     def update_z_positions(self, points, min_points):
         self.z_positins = points
         self.minimum_points(min_points)
-        
     def minimum_points(self,n):
         if len(self.z_positions) < n:
             raise self.printer.config_error(
-                "Need at least %d z positions for %s" % (n, self.name))
+                "Need at least %d z positions for %s"
+                % (n, self.name))
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
-    
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
         self.retry_helper.start(gcmd)
         self.probe_helper.start_probe(gcmd)
-        
     def probe_finalize(self, offsets, positions):
         # Setup for coordinate descent analysis
         z_offset = offsets[2]
@@ -212,9 +209,7 @@ class ZTilt:
         self.z_helper.adjust_steppers(adjustments, speed)
         return self.z_status.check_retry_result(
             self.retry_helper.check_retry([p[2] for p in positions]))
-    
-    def get_status(self, eventtime):
-            return self.z_status.get_status(eventtime)
-        
+        def get_status(self, eventtime):
+            return self.z_status.get_status(eventtime)       
 def load_config(config):
     return ZTilt(config)
