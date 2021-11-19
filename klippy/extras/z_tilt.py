@@ -138,6 +138,17 @@ class ZTilt:
         gcode = self.printer.lookup_object('gcode')
         gcode.register_command('Z_TILT_ADJUST', self.cmd_Z_TILT_ADJUST,
                                desc=self.cmd_Z_TILT_ADJUST_help)
+        gcode.register_command('Z_TILT_MODIFY', self.cmd_Z_TILT_MODIFY,
+                               desc=self.cmd_Z_TILT_MODIFY_help)
+    cmd_Z_TILT_MODIFY_help = "modify Z tilt parameters"
+    def cmd_Z_TILT_MODIFY(self, gcmd):
+        logging.info("modifying z positions")
+        offsets=[]
+        offsets[0][1] = gcmd.get_float('A', 0., minval=-10, maxval=50)
+        offsets[1][0] = gcmd.get_float('B', 0., minval=-30,maxval=50)
+        offsets[2][1] = gcmd.get_float('C', 0., minval=-10, maxval=50)
+        offsets[3][0] = gcmd.get_float('D', 0., minval=-30,maxval=50)
+        self.z_positions += self.z_positions + offsets
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
