@@ -6,6 +6,7 @@ import logging
 class StableZHome:
     def __init__(self, config):
         self.printer = config.get_printer()
+        self.name = config.get_name()
         self.steppers = stepper.PrinterStepper(config)
         self.gcode = self.printer.lookup_object('gcode')
         gcode_macro = self.printer.load_object(config, 'gcode_macro')
