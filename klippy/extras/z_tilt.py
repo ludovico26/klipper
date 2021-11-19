@@ -157,7 +157,6 @@ class ZTilt:
         if len(self.z_positions) < n:
             raise self.printer.config_error(
                 "Need at least %d z positions for %s" % (n, self.name))
-    
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
