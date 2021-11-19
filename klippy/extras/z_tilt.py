@@ -128,25 +128,8 @@ class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.section=config.get_name()
-        zeroes=[]
-        self.z_offsets = config.get('z_offsets', None)
-        if (self.z_offsets is not None):
-            try:
-                self.z_offsets = [float(o.strip())
-                                  for o in self.z_offsets.split(',')]
-            except:
-                raise config.error("Unable to parse z_offsets in %s" % (
-                    config.get_name()))
-            if (len(self.z_offsets) !=
-                    len(z_steppers)):
-                raise config.error("The number of z_offsets must match the "
-                    "number of probe points in %s" % (config.get_name()))
-        self.z_pos = config.getlists('z_positions', seps=(',', '\n'),
+        self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
-        if self.z_offsets is none:
-            self.z_positions=self.z_pos
-        if self.z_offsets is not none:
-            self.z_positions=self.z_pos+ self.z_offsets
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
         self.probe_helper.minimum_points(2)
