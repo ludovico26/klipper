@@ -157,6 +157,7 @@ class ZTilt:
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
         #comment zpos = (num1, num2)
+        section = self.section
         zpos=self.z_positions
         s_zpos = ""
         for zpos in self.z_positions:
