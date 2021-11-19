@@ -4,7 +4,7 @@ class RotationDistanceModifier:
         self.printer = config.get_printer()
         self.name = config.get_name()
         self.steppers = stepper.PrinterStepper(config)
-        config.getboolean("enable", False)
+        self.enable=config.getboolean("enable", False)
         self.gcode = self.printer.lookup.object('gcode')
         gcode.register_mux_command("SET_STEPPER_ROTATION_DISTANCE",
                                    "STEPPER",self.name,
