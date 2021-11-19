@@ -6,8 +6,9 @@ class RotationDistanceModifier:
         self.steppers = stepper.PrinterStepper(config)
         config.getboolean("enable", False)
         self.gcode = self.printer.lookup.object('gcode')
-        gcode.register_mux_command("SET_STEPPER_ROTATION_DISTANCE", "STEPPER",
-                                   self.name, self.cmd_SET_STEPPER_ROTATION_DISTANCE,
+        gcode.register_mux_command("SET_STEPPER_ROTATION_DISTANCE",
+                                   "STEPPER",self.name, 
+                                   self.cmd_SET_STEPPER_ROTATION_DISTANCE,
                                    desc=self.cmd_SET_STEPPER_DISTANCE_help)
         gcode.register_mux_command("SET_STEP_DISTANCE", "STEPPER",
                                    self.name, self.cmd_SET_STEP_DISTANCE,
@@ -29,8 +30,9 @@ class RotationDistanceModifier:
         toolhead.flush_step_generation()
         self.stepper.set_step_dist(dist)
         rotation_dist = gcmd.get_float('DISTANCE', above=0.)
-        gcmd.respond_info("stepper '%s' step distance set to %0.6f"
-                          % (self.name, dist))
+        gcmd.respond_info(
+            "stepper '%s' step distance set to %0.6f"
+            % (self.name, dist))
     cmd_SET_STEPPER_ROTATION_DISTANCE_help = "Change rot dist of stepper by name"
     def cmd_SET_STEPPER_ROTATION_DISTANCE(self, gcmd):
         toolhead = self.printer.lookup_object('toolhead')
