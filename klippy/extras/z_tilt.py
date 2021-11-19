@@ -139,10 +139,10 @@ class ZTilt:
         gcode = self.printer.lookup_object('gcode')
         gcode.register_command('Z_TILT_ADJUST', self.cmd_Z_TILT_ADJUST,
                                desc=self.cmd_Z_TILT_ADJUST_help)
-        gcode.register_command('Z_TILT_MODIFY', self.cmd_Z_MODIFY,
-                              desc=self.cmd_Z_MODIFY)
-    cmd_Z_MODIFY_help="modify porbe pt"
-    def Z_MODIFY (self,gcmd):
+        gcode.register_command('Z_TILT_MODIFY', self.cmd_Z_TILT_MODIFY,
+                              desc=self.cmd_Z_TILT_MODIFY)
+    cmd_Z_TILT_MODIFY_help="modify porbe pt"
+    def Z_TILT_MODIFY (self,gcmd):
         offsets=[]
         offsets[0][1] = gcmd.get_float('A', 0., minval=-10, maxval=50)
         offsets[1][0] = gcmd.get_float('B', 0., minval=-30,maxval=50)
