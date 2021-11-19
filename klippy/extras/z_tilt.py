@@ -139,8 +139,6 @@ class ZTilt:
         gcode = self.printer.lookup_object('gcode')
         gcode.register_command('Z_TILT_ADJUST', self.cmd_Z_TILT_ADJUST,
                                desc=self.cmd_Z_TILT_ADJUST_help)
-        gcode.register_command('Z_TILT_MODIFY', self.cmd_Z_TILT_MODIFY,
-                               desc=self.cmd_Z_TILT_MODIFY_help)
         gcode.register_command('PROVA', self.cmd_PROVA,
                                desc=self.cmd_PROVA_help)
         gcode.register_command('PROVA1', self.cmd_PROVA1,
@@ -189,19 +187,6 @@ class ZTilt:
         configfile = self.printer.lookup_object('configfile')
         configfile.set('stepper_z', 'position_endstop', "%.3f" %(z_pos,))
         gcmd.respond_info("final ")
-    cmd_Z_TILT_MODIFY_help = "Adjust the Z tilt"
-    def cmd_Z_TILT_MODIFY(self, gcmd):
-        configfile = self.printer.lookup_object('configfile')
-        section= self.section
-        s_zpos = ""
-        zpos=[]
-        zpos=self.z_positions
-        for i in self.z_positions:
-            s_zpos += "%.6f, %.6f\n" % tuple(zpos)
-        gcmd.respond_info("final z_positions are %s" % (s_zpos))
-        gcmd.respond_info(
-          "The SAVE_CONFIG command will update the printer config\n"
-          "file with these parameters and restart the printer.")
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
