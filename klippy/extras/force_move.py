@@ -53,8 +53,8 @@ class ForceMove:
                                    desc=self.cmd_SET_KINEMATIC_POSITION_help)
             gcode.register_command('MODIFY_ROTATION', self.cmd_MODIFY_ROTATION,
                                    desc=self.cmd_MODIFY_ROTATION_help)
-            gcode.register_mux_command("SET_STEP_DISTANCE", "STEPPER",
-                                   self.name, self.cmd_SET_STEP_DISTANCE,
+            gcode.register_command("SET_STEP_DISTANCE",
+                                   self.cmd_SET_STEP_DISTANCE,
                                    desc=self.cmd_SET_STEP_DISTANCE_help)
     cmd_SET_STEP_DISTANCE_help = "Set step dist of individual stepper"
     def cmd_SET_STEP_DISTANCE(self, gcmd):
