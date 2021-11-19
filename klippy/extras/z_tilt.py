@@ -149,6 +149,25 @@ class ZTilt:
                                desc=self.cmd_PROVA3_help)
         gcode.register_command('Z_TILT_MODIFY', self.cmd_Z_TILT_MODIFY,
                                desc=self.cmd_Z_TILT_MODIFY_help)
+        gcode.register_command('MODIFY_PROBE', self.cmd_MODIFY_PROBE,
+                               desc=self.cmd_MODIFY_PROBE_help)
+    cmd_MODIFY_PROBE_help="modify porbe pt"
+    def cmd_MODIFY_PROBE(self,gcmd):
+        p_pt=list(self.probe_helper.get_probe_points())
+        logging.info("modifying probe points")
+        self.ad_gcmd = gcmd
+        offsets[0] = gcmd.get_float('A', 0., minval=-10, maxval=50)
+        offsets[1] = gcmd.get_float('B', 0., minval=-30,maxval=50)
+        offsets[2] = gcmd.get_float('C', 0., minval=-10, maxval=50)
+        offsets[3] = gcmd.get_float('D', 0., minval=-30,maxval=50)
+        p_pt[0][1]= p_pt[0][1] +offsets[0]
+        p_pt[1][0]= p_pt[1][0] +offsets[1]
+        p_pt[2][1]= p_pt[2][1] +offsets[2]
+        p_pt[3][0]= p_pt[3][0] +offsets[3]
+       configfile = self.printer.lookup_object('configfile')
+       section = self.section
+       configfile.set(section, "points", p_pt)
+       gcmd.respond_info("final probe points are %s" % (p_pt))
     cmd_Z_TILT_MODIFY_help = "modify Z tilt parameters"
     def cmd_Z_TILT_MODIFY(self, gcmd):
         logging.info("modifying z positions")
