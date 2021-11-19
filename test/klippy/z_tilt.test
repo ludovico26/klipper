@@ -27,6 +27,9 @@ GET_POSITION
 # Run again in automatic mode
 Z_TILT_ADJUST
 
+#modification of points
+Z_TILT_MODIFY
+
 #MY CHANGES EXAMPLE..
 FORCE_MOVE STEPPER=stepper_x DISTANCE=0.3 VELOCITY=4
 SET_STEP_DISTANCE STEPPER=stepper_x DISTANCE=0.3
