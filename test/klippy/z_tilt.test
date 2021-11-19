@@ -8,9 +8,6 @@ G1 Z5 X10 Y10 F6000
 M400
 GET_POSITION
 
-#modify z_tilt for debug
-Z_TILT_MODIFY A=5 B=4 C=8 D=3
-
 # Run Z_TILT_ADJUST in manual mode
 Z_TILT_ADJUST METHOD=MANUAL
 G1 Z2.909972
