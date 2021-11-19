@@ -26,6 +26,7 @@ class ZAdjustHelper:
             raise self.printer.config_error(
                 "%s requires multiple z steppers" % (self.name,))
         self.z_steppers = z_steppers
+        
     def adjust_steppers(self, adjustments, speed):
         toolhead = self.printer.lookup_object('toolhead')
         gcode = self.printer.lookup_object('gcode')
@@ -128,8 +129,20 @@ class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.section=config.get_name()
-        self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
-                                           parser=float, count=2)
+        z_positions = config.get('z_positions', None)
+        z_count = None
+        self.z_positions = None
+        if z_positions is not None:
+            z_positions = z_positions.split('\n')
+            try:
+                z_positions = [line.split(',', 1)
+                               for line in z_positions if line.strip()]
+                self.z_positions = [(float(zp[0].strip()), float(zp[1].strip()))
+                                    for zp in z_positions]
+                z_count = len(self.z_positions)
+            except:
+                raise config.error("Unable to parse z_positions in %s" % (
+                    config.get_name()))
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
         self.probe_helper.minimum_points(2)
@@ -144,19 +157,32 @@ class ZTilt:
     cmd_MODIFY_PROBE_help="modify porbe pt"
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
-        ##extra
+        #comment zpos = (num1, num2)
+        zpos=self.z_positions
+        zpos=
+        s_zpos = ""
+        for zpos in self.z_positions:
+            s_zpos += "%.6f, %.6f\n" % tuple(zpos)
+        configfile.set(section, "z_positions", s_zpos)
+        self.ad_gcmd.respond_info("final z_positions are %s" % (s_zpos))
+                self.ad_gcmd.respond_info(
+          "The SAVE_CONFIG command will update the printer config\n"
+          "file with these parameters and restart the printer.")
     def update_z_positions(self, points, min_points):
         self.z_positins = points
         self.minimum_points(min_points)
+        
     def minimum_points(self,n):
         if len(self.z_positions) < n:
             raise self.printer.config_error(
                 "Need at least %d z positions for %s" % (n, self.name))
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
+    
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
         self.retry_helper.start(gcmd)
         self.probe_helper.start_probe(gcmd)
+        
     def probe_finalize(self, offsets, positions):
         # Setup for coordinate descent analysis
         z_offset = offsets[2]
@@ -186,7 +212,9 @@ class ZTilt:
         self.z_helper.adjust_steppers(adjustments, speed)
         return self.z_status.check_retry_result(
             self.retry_helper.check_retry([p[2] for p in positions]))
+    
     def get_status(self, eventtime):
             return self.z_status.get_status(eventtime)
+        
 def load_config(config):
     return ZTilt(config)
