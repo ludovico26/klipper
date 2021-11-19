@@ -19,12 +19,12 @@ class StableZHome:
         self.gcode.register_command(
             'STABLE_Z_HOME', self.cmd_STABLE_Z_HOME,
             desc=self.cmd_STABLE_Z_HOME_help)
-        gcode.register_mux_command("SET_STEPPER_ROTATION_DISTANCE",
-                                   "STEPPER",self.name,
+        gcode.register_command("SET_STEPPER_ROTATION_DISTANCE",
+                                   "STEPPER",
                                    self.cmd_SET_STEPPER_ROTATION,
                                    desc=self.cmd_cmd_SET_STEPPER_ROTATION_help)
-        gcode.register_mux_command("SET_STEP_DISTANCE", "STEPPER",
-                                   self.name, self.cmd_SET_STEP_DISTANCE,
+        gcode.register_command("SET_STEP_DISTANCE", "STEPPER",
+                               self.cmd_SET_STEP_DISTANCE,
                                    desc=self.cmd_SET_STEP_DISTANCE_help)
     cmd_SET_STEP_DISTANCE_help = "Set step dist of individual stepper"
     def cmd_SET_STEP_DISTANCE(self, gcmd):
