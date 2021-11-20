@@ -128,8 +128,10 @@ class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.section=config.get_name()
-        self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
+        self.offests=[]
+        self.save_var= config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
+        self.z_positions = self.save_var + self.offsets
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
         self.probe_helper.minimum_points(2)
