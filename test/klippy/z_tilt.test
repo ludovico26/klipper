@@ -27,7 +27,8 @@ GET_POSITION
 # Run again in automatic mode
 Z_TILT_ADJUST
 
-#modifcation
+#modifcation A=48
+MODIFY_PROBE
 
 #MY CHANGES EXAMPLE..
 FORCE_MOVE STEPPER=stepper_x DISTANCE=0.3 VELOCITY=4
