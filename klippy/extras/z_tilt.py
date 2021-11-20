@@ -128,7 +128,18 @@ class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.section=config.get_name()
-        z_positions = config.get('z_positions', None)
+        self.offsets = config.get('offsets', None)
+        if (self.z_offsets is not None):
+            try:
+                self.z_offsets = [float(o.strip())
+                                  for o in self.z_offsets.split(',')]
+            except:
+                raise config.error("Unable to parse z_offsets in %s" % (
+                    config.get_name()))
+            if (len(self.z_offsets) !=
+                    len(z_steppers)):
+                raise config.error("The number of z_offsets must match the "
+                    "number of steppers in %s" % (config.get_name()))
         self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
         self.retry_helper = RetryHelper(config)
