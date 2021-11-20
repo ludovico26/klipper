@@ -148,9 +148,9 @@ class ZTilt:
         logging.info("modifying probe points")
         #offset=[] offset[0]
         #offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
-        self.z_postions[0][0]=gcmd.get_float('A', 0., minval=-10,maxval=30)
+        self.z_postions[1][2]=gcmd.get_float('A', 0., minval=-10,maxval=30)
         gcmd.respond_info("modifying first z offset %.3f",
-                          self.z_positions[0][0])
+                          self.z_positions[1][2])
     def update_z_positions(self, points, min_points):
         self.z_positins = points
         self.minimum_points(min_points)
