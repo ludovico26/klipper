@@ -129,19 +129,8 @@ class ZTilt:
         self.printer = config.get_printer()
         self.section=config.get_name()
         z_positions = config.get('z_positions', None)
-        z_count = None
-        self.z_positions = None
-        if z_positions is not None:
-            z_positions = z_positions.split('\n')
-            try:
-                z_positions = [line.split(',', 1)
-                               for line in z_positions if line.strip()]
-                self.z_positions = [(float(zp[0].strip()), float(zp[1].strip()))
-                                    for zp in z_positions]
-                z_count = len(self.z_positions)
-            except:
-                raise config.error("Unable to parse z_positions in %s" % (
-                    config.get_name()))
+        self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
+                                           parser=float, count=2)
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
         self.probe_helper.minimum_points(2)
@@ -156,17 +145,11 @@ class ZTilt:
     cmd_MODIFY_PROBE_help="modify porbe pt"
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
-        #comment zpos = (num1, num2)
-        section = self.section
-        zpos=self.z_positions
-        s_zpos = ""
-        for zpos in self.z_positions:
-            s_zpos += "%.6f, %.6f\n" % tuple(zpos)
-        configfile.set(section, "z_positions", s_zpos)
-        gcmd.respond_info("final z_positions are %s" % (s_zpos))
-        gcmd.respond_info(
-            "The SAVE_CONFIG command will update the printer config\n"
-            "file with these parameters and restart the printer.")
+        offset=[]
+        offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
+        self.z_postions[0][0]=self.z_position[0][0]+offset[0]
+        gcmd.respond_info("modifying first z offset %.3f",
+                          self.z_postions[0][0])
     def update_z_positions(self, points, min_points):
         self.z_positins = points
         self.minimum_points(min_points)
