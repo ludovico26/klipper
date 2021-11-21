@@ -129,7 +129,6 @@ class ZTilt:
         self.printer = config.get_printer()
         self.section=config.get_name()
         #self.offests=[]
-        self.flag= true
         self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
         self.retry_helper = RetryHelper(config)
@@ -148,8 +147,6 @@ class ZTilt:
         logging.info("modifying probe points")
         #offset=[] offset[0]
         #offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
-        self.flag=false
-        gcmd.repsond_info("returning fag value  %s", self.flag)
         #self.z_postions[1][2]=gcmd.get_float('A', 0., minval=-10,maxval=30)
         #gcmd.respond_info("modifying first z offset %.3f",
         #                  self.z_positions[1][2])
