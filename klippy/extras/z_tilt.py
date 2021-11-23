@@ -152,8 +152,8 @@ class ZTilt:
         logging.info("printing probe point 0,0 and 0,1")
         #MODIFICATIONS
         cal_probe_points = list(self.probe_helper.get_probe_points())
-        logging.info("showing first probe pt %.3f,  %.3f",
-                       % (cal_probe_points[0][0], cal_probe_points[0][1]))
+        logging.info("showing first probe pt %.3f,  %.3f"
+                     % (cal_probe_points[0][0], cal_probe_points[0][1]))
     cmd_MODIFY_PROBE_help="modify porbe pt"
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
@@ -161,12 +161,12 @@ class ZTilt:
         cal_probe_points = list(self.probe_helper.get_probe_points())
         cal_probe_points[0] = (cal_probe_points[0][0], cal_probe_points[0][1]+5)
         self.probe_helper.update_probe_points(cal_probe_points, 4)
-        logging.info("showing first probe pt %.3f,  %.3f",
+        logging.info("showing first probe pt %.3f,  %.3f"
                        % (cal_probe_points[0][0], cal_probe_points[0][1]))
-        z_modifier=list(self.z_postions)
-        z_modifier[0]=(z_modifier[0][0], z_modifier[0][1])
+        z_modifier=self.z_postions
+        z_modifier[0]=(z_modifier[0][0], z_modifier[0][1]+7)
         #self.z_positions=z_modifier
-        logging.info("showing first z positions pt %.3f,  %.3f",
+        logging.info("showing first z positions pt %.3f,  %.3f"
                        % (z_modifier[0][0], z_modifier[0][1]))
         self.z_positions=z_modifier
         #END_MODIFICATIONS
