@@ -143,30 +143,34 @@ class ZTilt:
                                desc=self.cmd_MODIFY_PROBE_help)
     cmd_MODIFY_PROBE_help = "ibihhh huu"
     def cmd_MODIFY_PROBE(self,gcmd):
-        logging.info("modifying ijihh points")
-        offset=[]
+        logging.info("modifying points and z position")
         cal_probe_points = list(self.probe_helper.get_probe_points())
-        offset[0] = gcmd.get_float('A', 0., minval=-10, maxval=30)
-        offset[1] = gcmd.get_float('B', 0., minval=-10, maxval=30)
-        offset[2] = gcmd.get_float('C', 0., minval=-10, maxval=30)
-        offset[3] = gcmd.get_float('D', 0., minval=-10, maxval=30)
-        for i in 4:
-            if x % 2 == 0:
-                cal_probe_points[i]=(cal_probe_points[i][i],
-                                     cal_probe_points[i][i]+offset[i])
-                self.z_positions[i]=(self.z_positions[i][i],
-                                     self.z_positions[i][i]+offset[i])
-            if x % 2 == 1:
-                cal_probe_points[i]=(cal_probe_points[i][i]+offset[i],
-                                     cal_probe_points[i][i])
-                self.z_positions[i]=(self.z_positions[i][i]+offset[i],
-                                     self.z_positions[i][i])
+        A = gcmd.get_float('A', 0., minval=-10, maxval=30)
+        B = gcmd.get_float('B', 0., minval=-10, maxval=30)
+        C = gcmd.get_float('C', 0., minval=-10, maxval=30)
+        D = gcmd.get_float('D', 0., minval=-10, maxval=30)
+        cal_probe_points[0] = (cal_probe_points[0][0],
+                               cal_probe_points[0][1]+A)
+        cal_probe_points[1] = (cal_probe_points[1][0]+B,
+                               cal_probe_points[1][1])
+        cal_probe_points[2] = (cal_probe_points[2][0],
+                               cal_probe_points[2][1]+C)
+        cal_probe_points[3] = (cal_probe_points[3][0]+D,
+                               cal_probe_points[3][1])
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         logging.info("showing first probe pt %.3f, and second  %.3f,\n"
                      "and tirdh %.3f, and fourth  %.3f\n"
                        % (cal_probe_points[0][1], cal_probe_points[1][0],
                          cal_probe_points[2][1], cal_probe_points[3][0]))
-        logging.info("show first z pos  %.3f\n" % (self.z_positions[0][0],))
+        #logging.info("show first z pos  %.3f\n" % (self.z_positions[0][0],))
+        self.z_positions[0] = (self.z_positions[0][0],
+                               self.z_positions[0][1]+A)
+        self.z_positions[1] = (self.z_positions[1][0]+B,
+                               self.z_positions[1][1])
+        self.z_positions[2] = (self.z_positions[2][0],
+                               self.z_positions[2][1]+C)
+        self.z_positions[3] = (self.z_positions[3][0]+D,
+                               self.z_positions[3][1])
         logging.info("showing first motor pt %.3f, and second  %.3f,\n"
                      "and tirdh %.3f, and fourth  %.3f\n"
                        % (self.z_positions[0][1], self.z_positions[1][0],
