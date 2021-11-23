@@ -162,12 +162,13 @@ class ZTilt:
         cal_probe_points[0] = (cal_probe_points[0][0], cal_probe_points[0][1]+5)
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         logging.info("showing first probe pt %.3f,  %.3f",
-                       (self.probe_helper[0][0], self.probe_helper[0][1]))
+                       (cal_probe_points[0][0], cal_probe_points[0][1]))
         z_modifier=list(self.z_postions)
         z_modifier[0]=(z_modifier[0][0], z_modifier[0][1])
-        self.z_positions=z_modifier
+        #self.z_positions=z_modifier
         logging.info("showing first z positions pt %.3f,  %.3f",
-                       (self.z_positions[0][0], self.z_positions[0][1]))
+                       (z_modifier[0][0], z_modifier[0][1]))
+        self.z_positions=z_modifier
         #END_MODIFICATIONS
         #offset=[] offset[0]
         #offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
