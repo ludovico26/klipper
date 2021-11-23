@@ -164,12 +164,12 @@ class ZTilt:
         logging.info("showing first probe pt %.3f,  %.3f"
                        % (cal_probe_points[0][0], cal_probe_points[0][1])
         #z_modifier= self.z_positions
-        logging.info("showing first z positions pt %.3f,  %.3f"
-                       % (self.z_positions[0][0], self.z_positions[0][1]))
+        logging.info("showing first z positions pt %.3f,"
+                     % (self.z_positions[0][1],)
         self.z_positions[0]=(self.z_positions[0][0], self.z_positions[0][1]+7)
         #self.z_positions=z_modifier
-        logging.info("showing first z positions pt %.3f,  %.3f"
-                       % (self.z_positions[0][0], self.z_positions[0][1]))
+        logging.info("showing first z positions pt %.3f"
+                       % (self.z_positions[0][1],))
         #self.z_positions[0]=z_modifier[0]
         #END_MODIFICATIONS
         #offset=[] offset[0]
