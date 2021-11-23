@@ -128,7 +128,10 @@ class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.section=config.get_name()
-        #self.offests=[]
+        self.my_offsets=[]
+        #if config.get('my_offset', None) is not None:
+        #    self.my_offsets = config.getlists('my_offsets', seps=(',', '\n'),
+        #                                        parser=float, count=2)
         self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
         self.retry_helper = RetryHelper(config)
@@ -159,8 +162,12 @@ class ZTilt:
         cal_probe_points[0] = (cal_probe_points[0][0], cal_probe_points[0][1]+5)
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         logging.info("showing first probe pt %.3f,  %.3f",
-                       (self.probe_helper[0][0], self.probe_helper[0][1]+2))
-        self.z_postions[0]=(self.z_postions[0][0], self.z_postions[0][1])
+                       (self.probe_helper[0][0], self.probe_helper[0][1]))
+        z_modifier=list(self.z_postions)
+        z_modifier[0]=(z_modifier[0][0], z_modifier[0][1])
+        self.z_positions=z_modifier
+        logging.info("showing first z positions pt %.3f,  %.3f",
+                       (self.z_positions[0][0], self.z_positions[0][1]))
         #END_MODIFICATIONS
         #offset=[] offset[0]
         #offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
