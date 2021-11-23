@@ -133,6 +133,10 @@ class ZTilt:
                                            parser=float, count=2)
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
+        #MODIFICATIONS
+        cal_probe_points = list(self.probe_helper.get_probe_points())
+        self.probe_helper.update_probe_points(cal_probe_points, 4)
+        #END_MODIFICATIONS
         self.probe_helper.minimum_points(2)
         self.z_status = ZAdjustStatus(self.printer)
         self.z_helper = ZAdjustHelper(config, len(self.z_positions))
