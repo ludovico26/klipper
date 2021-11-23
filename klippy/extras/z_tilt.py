@@ -163,10 +163,14 @@ class ZTilt:
                        % (cal_probe_points[0][1], cal_probe_points[1][0],
                          cal_probe_points[2][1], cal_probe_points[3][0]))
         #logging.info("show first z pos  %.3f\n" % (self.z_positions[0][0],))
-        self.z_positions[0][1]=self.z_positions[0][1]+A
-        self.z_positions[1][0]=self.z_positions[1][0]+B
-        self.z_positions[2][1]=self.z_positions[2][1]+C
-        self.z_positions[3][0]=self.z_positions[3][0]+D
+        self.z_positions[0] = (self.z_positions[0][0],
+                               self.z_positions[0][1]+A)
+        self.z_positions[1] = (self.z_positions[1][0]+B,
+                               self.z_positions[1][1])
+        self.z_positions[2] = (self.z_positions[2][0],
+                               self.z_positions[2][1]+C)
+        self.z_positions[3] = (self.z_positions[3][0]+D,
+                               self.z_positions[3][1])
         logging.info("showing first motor pt %.3f, and second  %.3f,\n"
                      "and tirdh %.3f, and fourth  %.3f\n"
                        % (self.z_positions[0][1], self.z_positions[1][0],
