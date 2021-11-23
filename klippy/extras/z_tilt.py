@@ -140,7 +140,7 @@ class ZTilt:
                                desc=self.cmd_Z_TILT_ADJUST_help)
         gcode.register_command('MODIFY_PROBE', self.cmd_MODIFY_PROBE,
                                desc=self.cmd_MODIFY_PROBE_help)
-    cmd_MODIFY_PROBE_help="modify porbe pt"
+    cmd_MODIFY_PROBE_help = "modify probe pt"
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
         cal_probe_points = list(self.probe_helper.get_probe_points())
