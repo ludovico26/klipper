@@ -140,27 +140,27 @@ class ZTilt:
                                desc=self.cmd_Z_TILT_ADJUST_help)
         gcode.register_command('MODIFY_PROBE', self.cmd_MODIFY_PROBE,
                                desc=self.cmd_MODIFY_PROBE_help)
-    cmd_MODIFY_PROBE_help = "modify probe pt"
+    cmd_MODIFY_PROBE_help = "ibihhh huu"
     def cmd_MODIFY_PROBE(self,gcmd):
-        logging.info("modifying probe points")
+        logging.info("modifying ijihh points")
         cal_probe_points = list(self.probe_helper.get_probe_points())
-        offset=[]
-        offset[0] = gcmd.get_float('A', 0., minval=-10, maxval=30)
-        offset[1] = gcmd.get_float('B', 0., minval=-10, maxval=30)
-        offset[2] = gcmd.get_float('C', 0., minval=-10, maxval=30)
-        offset[3] = gcmd.get_float('D', 0., minval=-10, maxval=30)
-        for i in 4:
-            if i % 2 == 0:
-                cal_probe_points[i]=(cal_probe_points[i][i],
-                                     cal_probe_points[i][i]+offset[i])
-            else:
-                cal_probe_points[i]=(cal_probe_points[i][i]+offset[i],
-                                     cal_probe_points[i][i])
+        A = gcmd.get_float('A', 0., minval=-10, maxval=30)
+        B = gcmd.get_float('B', 0., minval=-10, maxval=30)
+        C = gcmd.get_float('C', 0., minval=-10, maxval=30)
+        D = gcmd.get_float('D', 0., minval=-10, maxval=30)
+        cal_probe_points[0] = (cal_probe_points[0][0], 
+                               cal_probe_points[0][1]+A)
+        cal_probe_points[1] = (cal_probe_points[1][0]+B,
+                               cal_probe_points[1][1])
+        cal_probe_points[2] = (cal_probe_points[2][0], 
+                               cal_probe_points[2][1]+C)
+        cal_probe_points[3] = (cal_probe_points[3][0]+D, 
+                               cal_probe_points[3][1])
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         logging.info("showing first probe pt %.3f, and second  %.3f,\n"
                      "and tirdh %.3f, and forth  %.3f\n"
                        % (cal_probe_points[0][1], cal_probe_points[1][0],
-                         cal_probe_points[2][1], cal_probe_points[3][0])
+                         cal_probe_points[2][1], cal_probe_points[3][0]))
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
