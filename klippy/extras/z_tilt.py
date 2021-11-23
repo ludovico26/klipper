@@ -163,6 +163,11 @@ class ZTilt:
                      "and tirdh %.3f, and forth  %.3f\n"
                        % (cal_probe_points[0][1], cal_probe_points[1][0],
                          cal_probe_points[2][1], cal_probe_points[3][0]))
+        logging.info("show first z pos  %.3f\n" % (self.z_positions[0][0],))
+        self.z_positions[0] = (self.z_positions[0][0],
+                               self.z_positions[0][1]+A)
+        logging.info("Modify first two z pos  %.3f, %.3f \n"
+                     % (self.z_positions[0][0],self.z_positions[0][1]))
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
