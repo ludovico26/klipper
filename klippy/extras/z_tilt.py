@@ -150,10 +150,10 @@ class ZTilt:
         #self.z_postions[1][2]=gcmd.get_float('A', 0., minval=-10,maxval=30)
         #gcmd.respond_info("modifying first z offset %.3f",
         #               self.z_positions[1][1])
-        self.probe_helper = list(self.probe_helper.get_probe_points())
-        logging.info("modifying first z offset %.3f",
-                       cal_probe_points[1][1])
-        self.probe_helper.update_probe_points(cal_probe_points, 4)
+        #self.probe_helper = list(self.probe_helper.get_probe_points())
+        #logging.info("modifying first z offset %.3f",
+        #               cal_probe_points[1][1])
+        #self.probe_helper.update_probe_points(cal_probe_points, 4)
     def update_z_positions(self, points, min_points):
         self.z_positins = points
         self.minimum_points(min_points)
