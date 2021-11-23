@@ -133,10 +133,6 @@ class ZTilt:
                                            parser=float, count=2)
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
-        #MODIFICATIONS
-        cal_probe_points = list(self.probe_helper.get_probe_points())
-        self.probe_helper.update_probe_points(cal_probe_points, 4)
-        #END_MODIFICATIONS
         self.probe_helper.minimum_points(2)
         self.z_status = ZAdjustStatus(self.printer)
         self.z_helper = ZAdjustHelper(config, len(self.z_positions))
@@ -149,6 +145,10 @@ class ZTilt:
     cmd_MODIFY_PROBE_help="modify porbe pt"
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
+        #MODIFICATIONS
+        cal_probe_points = list(self.probe_helper.get_probe_points())
+        self.probe_helper.update_probe_points(cal_probe_points, 4)
+        #END_MODIFICATIONS
         #offset=[] offset[0]
         #offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
         #self.z_postions[1][2]=gcmd.get_float('A', 0., minval=-10,maxval=30)
