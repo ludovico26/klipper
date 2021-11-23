@@ -163,14 +163,14 @@ class ZTilt:
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         logging.info("showing first probe pt %.3f,  %.3f"
                        % (cal_probe_points[0][0], cal_probe_points[0][1])
-        z_modifier= self.z_positions
+        #z_modifier= self.z_positions
         logging.info("showing first z positions pt %.3f,  %.3f"
-                       % (z_modifier[0][0], z_modifier[0][1]))
-        z_modifier[0]=(z_modifier[0][0], z_modifier[0][1]+7)
+                       % (self.z_positions[0][0], self.z_positions[0][1]))
+        self.z_positions[0]=(self.z_positions[0][0], self.z_positions[0][1]+7)
         #self.z_positions=z_modifier
         logging.info("showing first z positions pt %.3f,  %.3f"
-                       % (z_modifier[0][0], z_modifier[0][1]))
-        self.z_positions=z_modifier
+                       % (self.z_positions[0][0], self.z_positions[0][1]))
+        #self.z_positions[0]=z_modifier[0]
         #END_MODIFICATIONS
         #offset=[] offset[0]
         #offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
@@ -181,11 +181,6 @@ class ZTilt:
         #logging.info("modifying first z offset %.3f",
         #               cal_probe_points[1][1])
         #self.probe_helper.update_probe_points(cal_probe_points, 4)
-    def update_z_positions(self, points, min_points):
-        self.z_positions = points
-        self.minimum_points(min_points)
-    def get_zpos (self):
-        return self.z_positions
     def minimum_points(self,n):
         if len(self.z_positions) < n:
             raise self.printer.config_error(
