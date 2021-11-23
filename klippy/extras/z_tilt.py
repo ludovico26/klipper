@@ -146,17 +146,17 @@ class ZTilt:
                                desc=self.cmd_MODIFY_PROBE_help)
     cmd_PRINT_PROBE_help="modify porbe pt"
     def cmd_PRINT_PROBE(self,gcmd):
-        logging.info("printing probe points")
+        logging.info("printing probe point 0,0 and 0,1")
         #MODIFICATIONS
         cal_probe_points = list(self.probe_helper.get_probe_points())
-        logging.info("modifying first z offset %.3f",
-                       cal_probe_points[0][1])
+        logging.info("showing first probe pt %.3f,  %.3f",
+                       (cal_probe_points[0][0], cal_probe_points[0][1]))
     cmd_MODIFY_PROBE_help="modify porbe pt"
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
         #MODIFICATIONS
         cal_probe_points = list(self.probe_helper.get_probe_points())
-        cal_probe_points[0][1]=gcmd.get_float('A', 190., minval=-10,maxval=300)
+        cal_probe_points[0] = (cal_probe_points[0][0], cal_probe_points[0][1]+5)
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         #END_MODIFICATIONS
         #offset=[] offset[0]
