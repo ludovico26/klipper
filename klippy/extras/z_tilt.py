@@ -140,8 +140,17 @@ class ZTilt:
         gcode = self.printer.lookup_object('gcode')
         gcode.register_command('Z_TILT_ADJUST', self.cmd_Z_TILT_ADJUST,
                                desc=self.cmd_Z_TILT_ADJUST_help)
+        gcode.register_command('PRINT_PROBE', self.cmd_PRINT_PROBE,
+                               desc=self.cmd_PRINT_PROBE_help)
         gcode.register_command('MODIFY_PROBE', self.cmd_MODIFY_PROBE,
                                desc=self.cmd_MODIFY_PROBE_help)
+    cmd_PRINT_PROBE_help="modify porbe pt"
+    def cmd_PRINT_PROBE(self,gcmd):
+        logging.info("printing probe points")
+        #MODIFICATIONS
+        cal_probe_points = list(self.probe_helper.get_probe_points())
+        logging.info("modifying first z offset %.3f",
+                       cal_probe_points[0][1])
     cmd_MODIFY_PROBE_help="modify porbe pt"
     def cmd_MODIFY_PROBE(self,gcmd):
         logging.info("modifying probe points")
