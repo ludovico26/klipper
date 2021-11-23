@@ -175,11 +175,6 @@ class ZTilt:
         #logging.info("modifying first z offset %.3f",
         #               cal_probe_points[1][1])
         #self.probe_helper.update_probe_points(cal_probe_points, 4)
-    def minimum_points(self,n):
-        if len(self.z_positions) < n:
-            raise self.printer.config_error(
-                "Need at least %d z positions for %s"
-                % (n, self.name))
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
