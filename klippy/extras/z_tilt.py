@@ -163,18 +163,6 @@ class ZTilt:
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         logging.info("showing first probe pt %.3f,  %.3f"
                        % (cal_probe_points[0][0], cal_probe_points[0][1])
-        #z_modifier= self.z_positions
-        #self.z_positions[0]=z_modifier[0]
-        #END_MODIFICATIONS
-        #offset=[] offset[0]
-        #offset[0]= gcmd.get_float('A', 0., minval=-10,maxval=30)
-        #self.z_postions[1][2]=gcmd.get_float('A', 0., minval=-10,maxval=30)
-        #gcmd.respond_info("modifying first z offset %.3f",
-        #               self.z_positions[1][1])
-        #self.probe_helper = list(self.probe_helper.get_probe_points())
-        #logging.info("modifying first z offset %.3f",
-        #               cal_probe_points[1][1])
-        #self.probe_helper.update_probe_points(cal_probe_points, 4)
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
