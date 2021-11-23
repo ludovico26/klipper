@@ -127,8 +127,9 @@ class RetryHelper:
 class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
-        self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
+        self.parsing = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
+        self.z_positions= list(self.parsing)
         self.retry_helper = RetryHelper(config)
         self.probe_helper = probe.ProbePointsHelper(config, self.probe_finalize)
         self.probe_helper.minimum_points(2)
