@@ -127,11 +127,6 @@ class RetryHelper:
 class ZTilt:
     def __init__(self, config):
         self.printer = config.get_printer()
-        self.section=config.get_name()
-        self.my_offsets=[]
-        #if config.get('my_offset', None) is not None:
-        #    self.my_offsets = config.getlists('my_offsets', seps=(',', '\n'),
-        #                                        parser=float, count=2)
         self.z_positions = config.getlists('z_positions', seps=(',', '\n'),
                                            parser=float, count=2)
         self.retry_helper = RetryHelper(config)
@@ -143,26 +138,6 @@ class ZTilt:
         gcode = self.printer.lookup_object('gcode')
         gcode.register_command('Z_TILT_ADJUST', self.cmd_Z_TILT_ADJUST,
                                desc=self.cmd_Z_TILT_ADJUST_help)
-        gcode.register_command('PRINT_PROBE', self.cmd_PRINT_PROBE,
-                               desc=self.cmd_PRINT_PROBE_help)
-        gcode.register_command('MODIFY_PROBE', self.cmd_MODIFY_PROBE,
-                               desc=self.cmd_MODIFY_PROBE_help)
-    cmd_PRINT_PROBE_help="modify porbe pt"
-    def cmd_PRINT_PROBE(self,gcmd):
-        logging.info("printing probe point 0,0 and 0,1")
-        #MODIFICATIONS
-        cal_probe_points = list(self.probe_helper.get_probe_points())
-        logging.info("showing first probe pt %.3f,  %.3f"
-                     % (cal_probe_points[0][0], cal_probe_points[0][1]))
-    cmd_MODIFY_PROBE_help="modify porbe pt"
-    def cmd_MODIFY_PROBE(self,gcmd):
-        logging.info("modifying probe points")
-        #MODIFICATIONS
-        cal_probe_points = list(self.probe_helper.get_probe_points())
-        cal_probe_points[0] = (cal_probe_points[0][0], cal_probe_points[0][1]+4)
-        self.probe_helper.update_probe_points(cal_probe_points, 4)
-        logging.info("showing first probe pt %.3f,  %.3f"
-                       % (cal_probe_points[0][0], cal_probe_points[0][1])
     cmd_Z_TILT_ADJUST_help = "Adjust the Z tilt"
     def cmd_Z_TILT_ADJUST(self, gcmd):
         self.z_status.reset()
@@ -197,7 +172,8 @@ class ZTilt:
         self.z_helper.adjust_steppers(adjustments, speed)
         return self.z_status.check_retry_result(
             self.retry_helper.check_retry([p[2] for p in positions]))
-        def get_status(self, eventtime):
+    def get_status(self, eventtime):
             return self.z_status.get_status(eventtime)
+
 def load_config(config):
     return ZTilt(config)
