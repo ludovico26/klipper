@@ -147,6 +147,7 @@ class ZTilt:
         logging.info("modifying probe points")
         #MODIFICATIONS
         cal_probe_points = list(self.probe_helper.get_probe_points())
+        cal_probe_points[0][1]=gcmd.get_float('A', 190., minval=-10,maxval=300)
         self.probe_helper.update_probe_points(cal_probe_points, 4)
         #END_MODIFICATIONS
         #offset=[] offset[0]
