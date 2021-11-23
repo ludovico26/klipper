@@ -51,8 +51,6 @@ class ForceMove:
             gcode.register_command('SET_KINEMATIC_POSITION',
                                    self.cmd_SET_KINEMATIC_POSITION,
                                    desc=self.cmd_SET_KINEMATIC_POSITION_help)
-            gcode.register_command('MODIFY_ROTATION', self.cmd_MODIFY_ROTATION,
-                                   desc=self.cmd_MODIFY_ROTATION_help)
             gcode.register_command("SET_STEP_DISTANCE",
                                    self.cmd_SET_STEP_DISTANCE,
                                    desc=self.cmd_SET_STEP_DISTANCE_help)
@@ -154,41 +152,5 @@ class ForceMove:
         z = gcmd.get_float('Z', curpos[2])
         logging.info("SET_KINEMATIC_POSITION pos=%.3f,%.3f,%.3f", x, y, z)
         toolhead.set_position([x, y, z, curpos[3]], homing_axes=(0, 1, 2))
-    cmd_MODIFY_ROTATION_help = "Modify rotation distance fo stepper and save it"
-    def cmd_MODIFY_ROTATION(self, gcmd):
-        my_stepper=[]
-        my_stepper[0]="stepper_z"
-        my_stepper[1]="stepper_z1"
-        my_stepper[2]="stepper_z2"
-        my_stepper[3]="stepper_z3"
-        speed= []
-        speed[0]=gcmd.get_float('SPEED', 0., above=0.)
-        speed[1]=3
-        speed[2]=3
-        speed[3]=3
-        movements=[]
-        movements[0]= gcmd.get_float('A', 0., above=0.)
-        movements[1]= gcmd.get_float('B', 0., above=0.)
-        movements[2]= gcmd.get_float('C', 0., above=0.)
-        movements[3]= gcmd.get_float('D', 0., above=0.)
-        logging.info("issuing different movement for z steppers")
-        self.move_z_steppers(my_stepper,movements, speed)
-    def move_z_steppers(self, stepper, dist, speed, accel=0.):
-        toolhead = self.printer.lookup_object('toolhead')
-        toolhead.flush_step_generation()
-        prev_sk = stepper.set_stepper_kinematics(self.stepper_kinematics)
-        prev_trapq = stepper.set_trapq(self.trapq)
-        stepper.set_position((0., 0., 0.))
-        axis_r, accel_t, cruise_t, cruise_v = calc_move_time(dist, speed, accel)
-        print_time = toolhead.get_last_move_time()
-        self.trapq_append(self.trapq, print_time, accel_t, cruise_t, accel_t,
-                          0., 0., 0., axis_r, 0., 0., 0., cruise_v, accel)
-        print_time = print_time + accel_t + cruise_t + accel_t
-        stepper.generate_steps(print_time)
-        self.trapq_finalize_moves(self.trapq, print_time + 99999.9)
-        stepper.set_trapq(prev_trapq)
-        stepper.set_stepper_kinematics(prev_sk)
-        toolhead.note_kinematic_activity(print_time)
-        toolhead.dwell(accel_t + cruise_t + accel_t)
 def load_config(config):
     return ForceMove(config)
