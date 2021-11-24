@@ -53,6 +53,29 @@ class BedTiltCalibrate:
         self.gcode.register_command(
             'BED_TILT_CALIBRATE', self.cmd_BED_TILT_CALIBRATE,
             desc=self.cmd_BED_TILT_CALIBRATE_help)
+        gcode.register_command('MODIFY_TILT', self.cmd_MODIFY_TILT,
+                               desc=self.cmd_MODIFY_TILT_help)
+    cmd_MODIFY_TILT_help = "Modify Bed tilt proe posints"
+    def cmd_MODIFY_TILT(self,gcmd):
+        logging.info("modifying points and z position")
+        cal_probe_points = list(self.probe_helper.get_probe_points())
+        A = gcmd.get_float('A', 0., minval=-10, maxval=30)
+        B = gcmd.get_float('B', 0., minval=-10, maxval=30)
+        C = gcmd.get_float('C', 0., minval=-10, maxval=30)
+        D = gcmd.get_float('D', 0., minval=-10, maxval=30)
+        cal_probe_points[0] = (cal_probe_points[0][0],
+                               cal_probe_points[0][1]+A)
+        cal_probe_points[1] = (cal_probe_points[1][0]+B,
+                               cal_probe_points[1][1])
+        cal_probe_points[2] = (cal_probe_points[2][0],
+                               cal_probe_points[2][1]+C)
+        cal_probe_points[3] = (cal_probe_points[3][0]+D,
+                               cal_probe_points[3][1])
+        self.probe_helper.update_probe_points(cal_probe_points, 4)
+        logging.info("showing first probe pt %.3f, and second  %.3f,\n"
+                     "and tirdh %.3f, and fourth  %.3f\n"
+                       % (cal_probe_points[0][1], cal_probe_points[1][0],
+                         cal_probe_points[2][1], cal_probe_points[3][0]))
     cmd_BED_TILT_CALIBRATE_help = "Bed tilt calibration script"
     def cmd_BED_TILT_CALIBRATE(self, gcmd):
         self.probe_helper.start_probe(gcmd)
