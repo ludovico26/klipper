@@ -53,7 +53,7 @@ class BedTiltCalibrate:
         self.gcode.register_command(
             'BED_TILT_CALIBRATE', self.cmd_BED_TILT_CALIBRATE,
             desc=self.cmd_BED_TILT_CALIBRATE_help)
-        gcode.register_command('MODIFY_TILT', self.cmd_MODIFY_TILT,
+        self.gcode.register_command('MODIFY_TILT', self.cmd_MODIFY_TILT,
                                desc=self.cmd_MODIFY_TILT_help)
     cmd_MODIFY_TILT_help = "Modify Bed tilt proe posints"
     def cmd_MODIFY_TILT(self,gcmd):
