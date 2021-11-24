@@ -57,7 +57,7 @@ class BedTiltCalibrate:
                                desc=self.cmd_MODIFY_TILT_help)
     cmd_MODIFY_TILT_help = "Modify Bed tilt proe posints"
     def cmd_MODIFY_TILT(self,gcmd):
-        logging.info("modifying points and z position")
+        logging.info("modifying tilt probe")
         cal_probe_points = list(self.probe_helper.get_probe_points())
         A = gcmd.get_float('A', 0., minval=-10, maxval=30)
         B = gcmd.get_float('B', 0., minval=-10, maxval=30)
@@ -72,7 +72,7 @@ class BedTiltCalibrate:
         cal_probe_points[3] = (cal_probe_points[3][0]+D,
                                cal_probe_points[3][1])
         self.probe_helper.update_probe_points(cal_probe_points, 4)
-        logging.info("showing first probe pt %.3f, and second  %.3f,\n"
+        logging.info("MODIFICATIONS first probe pt %.3f, and second  %.3f,\n"
                      "and tirdh %.3f, and fourth  %.3f\n"
                        % (cal_probe_points[0][1], cal_probe_points[1][0],
                          cal_probe_points[2][1], cal_probe_points[3][0]))
